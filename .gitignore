@@ -1,0 +1,44 @@
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+**/credentials*.json
+**/secrets*.json
+
+# BMad personal overrides (local only — see _bmad/custom/config.user.toml)
+_bmad/custom/config.user.toml
+
+# Optional: installer-managed personal answers (regenerated on install)
+# Uncomment if you do not want your name/locale in git:
+# _bmad/config.user.toml
+
+# OS and editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*~
+
+# Python (BMad scripts / future backend)
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.python-version
+
+# Node (future app)
+node_modules/
+dist/
+build/
+.next/
+.nuxt/
+
+# Logs and local tooling
+*.log
+.cursor/
+
+# Optional: Cursor BMad skill mirror — reinstall via BMad installer on new machines
+# Remove the line below to commit .agents/ for a full snapshot
+.agents/
