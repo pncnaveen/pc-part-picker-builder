@@ -2,15 +2,18 @@
 
 Web app for individuals to plan custom PC builds with **budget**, **owned hardware**, **compatibility validation**, **India-region catalog/pricing**, and **retailer link-outs**. Organization and dealer flows are planned for v2.
 
-This repository uses the **[BMad Method](https://docs.bmad-method.org/)** (BMad **6.12.0**) in **Cursor** for planning and (later) implementation workflows.
+This repository uses the **[BMad Method](https://docs.bmad-method.org/)** (v7 skills) in **Cursor** for planning and implementation workflows.
+
+**Active initiative:** `initiative-pc-part-picker-builder` (set in `_bmad/custom/config.user.toml` on each machine).
 
 ## Planning artifacts (current state)
 
 | Stage | Location | Status |
 |--------|----------|--------|
-| Brainstorm | `_bmad-output/brainstorming/brainstorm-pc-parts-picker-builder-2026-10-02/` | Complete |
-| Product brief | `_bmad-output/planning-artifacts/briefs/brief-pc-part-picker-builder-2026-10-03/` | Ready |
-| PRD | `_bmad-output/planning-artifacts/prds/prd-pc-part-picker-builder-2026-10-03/` | **Draft** (not finalized) |
+| Initiative | `_bmad-output/initiative-pc-part-picker-builder/` | Active |
+| Brainstorm | `.../brainstorm-pc-parts-picker-builder/` | Complete |
+| Product brief | `.../brief-pc-part-picker-builder/` | Ready |
+| PRD | `.../prd-pc-part-picker-builder/` | **Draft** (not finalized) |
 
 Key files:
 
@@ -96,7 +99,7 @@ In Cursor Agent chat:
 | Intent | Invoke |
 |--------|--------|
 | Where am I / what’s next? | `/bmad-help` or “bmad help” |
-| Resume PRD | `/bmad-prd` and point at `_bmad-output/planning-artifacts/prds/prd-pc-part-picker-builder-2026-10-03/` |
+| Resume PRD | `bmad-prd` and point at `_bmad-output/initiative-pc-part-picker-builder/prd-pc-part-picker-builder/` |
 | Finalize PRD later | Same skill; say **finalize** when ready |
 | UX after PRD | `/bmad-ux` |
 | Architecture | `/bmad-architecture` |

@@ -1,9 +1,11 @@
 ---
+type: brief
 title: PC Part Picker & Builder — Individuals (v1)
 status: ready
 created: 2026-10-03
 updated: 2026-10-03
 scope: v1 individuals portal
+skill: bmad-product-brief
 ---
 
 # Product Brief: PC Part Picker & Builder (Individuals, v1)

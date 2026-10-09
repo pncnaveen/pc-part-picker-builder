@@ -38,6 +38,6 @@ v1 estimates are **directional**, not benchmark substitutes. Architecture should
 
 ## Source artifacts
 
-- `_bmad-output/planning-artifacts/briefs/brief-pc-part-picker-builder-2026-10-03/brief.md`
-- `_bmad-output/planning-artifacts/briefs/brief-pc-part-picker-builder-2026-10-03/addendum.md`
-- `_bmad-output/brainstorming/brainstorm-pc-parts-picker-builder-2026-10-02/brainstorm-intent.md`
+- `_bmad-output/initiative-pc-part-picker-builder/brief-pc-part-picker-builder/brief-pc-part-picker-builder.md`
+- `_bmad-output/initiative-pc-part-picker-builder/brief-pc-part-picker-builder/addendum.md`
+- `_bmad-output/initiative-pc-part-picker-builder/brainstorm-pc-parts-picker-builder/brainstorm-pc-parts-picker-builder.md`

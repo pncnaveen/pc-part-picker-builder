@@ -32,5 +32,5 @@ PRD may refine metrics, refresh SLA, and regional rollout without reopening brie
 
 ## Source artifacts
 
-- `_bmad-output/brainstorming/brainstorm-pc-parts-picker-builder-2026-10-02/brainstorm-intent.md`
-- `_bmad-output/brainstorming/brainstorm-pc-parts-picker-builder-2026-10-02/.memlog.md`
+- `_bmad-output/initiative-pc-part-picker-builder/brainstorm-pc-parts-picker-builder/brainstorm-pc-parts-picker-builder.md`
+- `_bmad-output/initiative-pc-part-picker-builder/brainstorm-pc-parts-picker-builder/.memlog.md`

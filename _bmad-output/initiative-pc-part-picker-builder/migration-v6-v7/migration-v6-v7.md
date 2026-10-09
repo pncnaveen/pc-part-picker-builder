@@ -1,7 +1,7 @@
 ---
 type: migration
 title: Move v6 planning artifacts into v7 initiative layout
-status: draft
+status: done
 created: 2026-10-09
 from: "6"
 to: "7"
@@ -84,9 +84,9 @@ active_initiative = "initiative-pc-part-picker-builder"
 
 | Item | Result |
 |------|--------|
-| Every v6 file accounted for | Pending execution |
-| Folder main-file convention | Pending execution |
-| Store root layout | Pending execution |
-| `tickets.py status` | **Cannot run** — `_bmad/method/scripts/tickets.py` not present in this install; verify manually |
-| Story/entry mapping | N/A (no stories) |
-| Plan paths / config | Pending execution |
+| Every v6 file accounted for | **Pass** — 8 files under initiative; empty v6 folders removed |
+| Folder main-file convention | **Pass** — brief/prd/brainstorm main files renamed; initiative envelope present |
+| Store root layout | **Pass** — `initiative-pc-part-picker-builder/` at store root |
+| `tickets.py status` | **Skipped** — script not in `_bmad/`; no epics/stories to validate |
+| Story/entry mapping | **N/A** |
+| Plan paths / config | **Pass** — paths rewritten; `config.user.toml` sets `active_initiative` (local, gitignored) |

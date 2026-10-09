@@ -1,10 +1,12 @@
 ---
+type: prd
 title: PC Part Picker & Builder — Individuals (v1)
 status: draft
 created: 2026-10-03
 updated: 2026-10-03T15:52
-source_brief: _bmad-output/planning-artifacts/briefs/brief-pc-part-picker-builder-2026-10-03/brief.md
+source_brief: _bmad-output/initiative-pc-part-picker-builder/brief-pc-part-picker-builder/brief-pc-part-picker-builder.md
 scope: v1 individuals portal
+skill: bmad-prd
 ---
 
 # PRD: PC Part Picker & Builder — Individuals (v1)
@@ -487,4 +489,4 @@ Everything in §4 FR-1 through FR-31 plus Platform and cross-cutting NFRs below.
 
 ---
 
-*Next downstream: UX (`bmad-ux`), architecture (`bmad-architecture`), epics (`bmad-create-epics-and-stories`).*
+*Next downstream: finish PRD (`bmad-prd`), then `bmad-spec`, optional `bmad-ux` / `bmad-architecture`, then `bmad-ticket` for epics and stories.*

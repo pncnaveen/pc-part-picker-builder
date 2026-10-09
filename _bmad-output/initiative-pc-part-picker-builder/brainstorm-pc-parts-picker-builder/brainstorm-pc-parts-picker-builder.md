@@ -1,6 +1,14 @@
+---
+type: brainstorm
+title: PC parts picker & builder — brainstorm
+status: done
+created: 2026-10-02
+skill: bmad-brainstorming
+---
+
 # Brainstorm intent — PC parts picker & builder
 
-**Session:** `brainstorm-pc-parts-picker-builder-2026-10-02`  
+**Session:** `brainstorm-pc-parts-picker-builder`  
 **Status:** Complete  
 **Downstream use:** `bmad-product-brief`, `bmad-prd`, `bmad-spec`
 
