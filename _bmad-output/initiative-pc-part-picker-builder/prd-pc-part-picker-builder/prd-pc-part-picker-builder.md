@@ -3,7 +3,7 @@ type: prd
 title: PC Part Picker & Builder — Individuals (v1)
 status: draft
 created: 2026-10-03
-updated: 2026-10-03T15:52
+updated: 2026-10-10T12:44
 source_brief: _bmad-output/initiative-pc-part-picker-builder/brief-pc-part-picker-builder/brief-pc-part-picker-builder.md
 scope: v1 individuals portal
 skill: bmad-prd
@@ -51,13 +51,13 @@ v1 serves **individual builders only**. Organization procurement and dealer mark
 - **Persona + context:** Jordan, 24, first desktop build, ₹1,00,000 budget, keeping a 1440p 165Hz monitor from a prior setup.
 - **Entry state:** Unauthenticated; lands on marketing/home, chooses “Start a build.”
 - **Path:** Sets budget and launch **Region**; declares owned **Monitor** and primary use (competitive games); chooses guided path; accepts recommended CPU/motherboard/RAM/GPU/storage/PSU/case slots with live **Compatibility** status; reviews **Performance estimate** for two declared titles at native resolution.
-- **Climax:** Build summary shows **Compatible**, under budget, performance band “meets target” for declared games; Jordan creates an account to save.
-- **Resolution:** Saved **Build** on dashboard; optional share link copied.
+- **Climax:** Build summary shows **Compatible**, under budget, performance band “meets target” for declared games; Jordan marks build **Complete** (Finalized) after verifying email.
+- **Resolution:** Saved **Finalized build** on dashboard; optional share link copied; **Build summary email** sent when FR-32/FR-34 allow.
 - **Edge case:** Selected GPU exceeds case clearance—system blocks **Complete build** with clearance conflict and suggests alternate GPUs that fit.
 
 **UJ-2. Sam upgrades from a partial owned rig**
 
-- **Persona + context:** Sam owns a working PC (CPU, board, RAM, PSU, case) and wants a better GPU within $400.
+- **Persona + context:** Sam owns a working PC (CPU, board, RAM, PSU, case) and wants a better GPU within ₹35,000.
 - **Entry state:** Authenticated; “Upgrade from what I own.”
 - **Path:** Registers owned parts into **Owned inventory**; system treats them as fixed slots; Sam browses GPU catalog filtered by board slot, PSU headroom, and case length; swaps GPU; re-validates power and clearance.
 - **Climax:** Upgrade path shows only compatible GPUs; budget delta isolated to changed slots.
@@ -76,10 +76,10 @@ v1 serves **individual builders only**. Organization procurement and dealer mark
 **UJ-4. Riley revisits a saved build after a price spike**
 
 - **Persona + context:** Riley saved a build last week; one part price increased 18%.
-- **Entry state:** Authenticated; opens saved Build from dashboard.
+- **Entry state:** Authenticated; opens saved Build from dashboard or from a **Build alert email** deep link (FR-33).
 - **Path:** Sees **Stale price** badge on affected Part; total over budget; uses substitute or picks alternate in slot; compatibility re-runs.
 - **Climax:** Build back under budget with current prices; staleness cleared for updated lines.
-- **Resolution:** Riley exports or shares updated build.
+- **Resolution:** Riley exports or shares updated build; may have been nudged by batched price/availability alert email.
 
 ## 3. Glossary
 
@@ -98,6 +98,9 @@ v1 serves **individual builders only**. Organization procurement and dealer mark
 - **Stale price / Stale availability** — Data older than defined refresh thresholds (see §7 and addendum).
 - **Share link** — URL granting view (and opt-in suggest) access to a Build without exposing account credentials.
 - **Account** — Authenticated user identity required to persist Builds across sessions/devices.
+- **Finalized build** — A saved Build that the user has marked **Complete** per FR-29, with Compatibility status **Compatible** or **Warning** (not Invalid).
+- **Build summary email** — A transactional email to the Account’s verified address containing the Finalized build’s in-app build identifier, deep link, part list, prices, availability flags, and staleness indicators at send time (no retailer URLs).
+- **Build alert email** — A transactional email sent when catalog **price** or **availability** changes for any Part on a Finalized build since the last notification for that build (or since finalize, for the first alert).
 
 ## 4. Features
 
@@ -344,7 +347,7 @@ A viewer with share access can propose Substitute or Part change that passes Com
 
 **Consequences (testable):**
 - Incompatible proposals never apply automatically.
-- Owner rejection leaves Build unchanged with optional notification `[ASSUMPTION: in-app only, no email v1]`.
+- Owner rejection leaves Build unchanged with optional **in-app** notification (social suggestions do not trigger build emails; FR-32/FR-33 only).
 
 #### FR-24: Compare two builds
 
@@ -398,6 +401,48 @@ A user can open an outbound purchase link for a Catalog Part from Build summary 
 
 **Out of Scope:** Unified in-app shopping cart or checkout (v2).
 
+### 4.11 Build email notifications (v1)
+
+**Description:** Transactional emails for Finalized builds. Realizes UJ-1, UJ-4.
+
+#### FR-32: Build summary email on finalize
+
+When a user successfully marks a saved Build **Complete** per FR-29 and the Build becomes a **Finalized build**, the system sends one **Build summary email** to the Account’s verified email address.
+
+**Consequences (testable):**
+- Email is not sent if Compatibility status is **Invalid** or email is unverified (FR-30).
+- Email includes: build name, **in-app build identifier**, deep link to open the build in-app, each selected Part (slot, name, SKU), price in INR, availability state, stale badges per FR-7, build total vs budget, and Compatibility status.
+- Email does **not** include retailer URLs (purchase remains in-app via FR-31).
+- Send is skipped when the user has disabled **build summary emails** in account settings (FR-34).
+- Exactly one summary email per finalize event (re-finalize after edit sends a new summary email for that event).
+- Send failure is logged; user sees in-app confirmation that finalize succeeded even if email is queued/retrying.
+
+#### FR-33: Build alert email on price or availability change
+
+For each **Finalized build**, when catalog **price** or **availability** changes for any Part on that build (per FR-26 refresh), the system sends a **Build alert email** to the Account’s verified email address.
+
+**Consequences (testable):**
+- Alerts apply only to Finalized builds that remain saved (not deleted).
+- Each email lists only Parts that changed since the previous alert for that build (or since finalize if none sent yet).
+- At most **one alert email per build per 48 hours** (batch multiple Part changes into one email).
+- No alert is sent for changes that only affect staleness metadata without a price or availability delta.
+- Send is skipped when the user has disabled **price/availability alert emails** in account settings (FR-34).
+- Unverified email accounts do not receive alerts.
+
+#### FR-34: Account email notification settings
+
+An authenticated user can manage build-related email preferences in account settings:
+
+| Setting | Controls | Default (verified account) |
+|--------|----------|----------------------------|
+| **Build summary emails** | FR-32 (on finalize) | On |
+| **Price/availability alert emails** | FR-33 | On |
+
+**Consequences (testable):**
+- Changes apply to future sends only.
+- Unverified accounts cannot receive build emails (FR-30).
+- UI explains each toggle in plain language (what is sent and when).
+
 ## 5. Non-Goals (Explicit)
 
 - Organization accounts, division templates, bulk procurement
@@ -410,12 +455,13 @@ A user can open an outbound purchase link for a Catalog Part from Build summary 
 - OAuth / social login (v2)
 - In-app unified cart / checkout (v2; v1 is link-out only)
 - Manual spec entry for non-catalog owned hardware (deferred past v1)
+- Marketing / promotional email newsletters (v1)
 
 ## 6. MVP Scope
 
 ### 6.1 In Scope
 
-Everything in §4 FR-1 through FR-31 plus Platform and cross-cutting NFRs below.
+Everything in §4 FR-1 through FR-34 plus Platform and cross-cutting NFRs below.
 
 ### 6.2 Out of Scope for MVP
 
@@ -451,10 +497,14 @@ Everything in §4 FR-1 through FR-31 plus Platform and cross-cutting NFRs below.
 
 - **Platform:** Web-first responsive UI; latest two versions of Chrome, Firefox, Safari, Edge `[ASSUMPTION]`.
 - **Performance:** Initial catalog browse interactive ≤3s p95 on 4G `[ASSUMPTION]`; Compatibility evaluation per §4.4.
-- **Security:** Email-verified accounts (FR-30); session auth; share links use unguessable tokens; rate-limit suggestion endpoints.
+- **Security:** Email-verified accounts (FR-30); session auth; share links use unguessable tokens; rate-limit suggestion endpoints; rate-limit outbound build emails per account.
+- **Email (transactional):** Build summary (FR-32) and price/availability alerts (FR-33) only; no marketing content in v1.
+- **Email content:** Each message includes an in-app build identifier and deep link to the build; no retailer link-outs in email.
+- **Email reliability:** Async send with retry; failures logged; message body limited to account email, build identifier, and part/price/availability data.
+- **Email preferences:** Account settings (FR-34) control sends; defaults on for verified accounts.
 - **Accessibility:** WCAG 2.1 AA for core build flows `[ASSUMPTION: aspirational v1 target]`.
 - **Privacy:** Social features opt-in; share links expose only Build data user confirms.
-- **Observability:** Log compatibility failures, substitute offers, staleness breaches for SM reporting.
+- **Observability:** Log compatibility failures, substitute offers, staleness breaches, and email send failures for SM reporting.
 
 ## 9. Resolved Decisions (2026-10-03)
 
@@ -467,6 +517,7 @@ Everything in §4 FR-1 through FR-31 plus Platform and cross-cutting NFRs below.
 | Required Slots for Complete | **FR-29** — CPU, cooler, motherboard, RAM, storage, case, PSU; GPU optional |
 | Authentication | **Email + verification** in v1; **OAuth in v2** (FR-30) |
 | Product stakes | Learning / pre-revenue launch (user confirmed) |
+| Build emails (2026-10-10) | **FR-32** summary on finalize; **FR-33** price/availability alerts (48h batch); **FR-34** opt-out toggles (default on); in-app build id + deep link; no retailer URLs in email |
 
 ## 10. Open Questions
 
@@ -479,7 +530,9 @@ Everything in §4 FR-1 through FR-31 plus Platform and cross-cutting NFRs below.
 - Max ~12 Slots; commit-on-select compatibility UX (FR-9).
 - Compatibility p95 ≤ 2s (FR-11).
 - Single mutable save version, no history (FR-20).
-- In-app notifications only for suggestion accept/reject (FR-23).
+- Social suggestion notifications are in-app only (FR-23); build emails are FR-32/FR-33.
+- Build email toggles default on for verified accounts (FR-34).
+- Price/availability alert batching: at most one email per build per 48 hours (FR-33).
 - Internal ops maintain catalog (FR-25).
 - v1 purchase handoff is retailer link-out; in-app cart is v2 (FR-31, §6.2).
 - Required Slot list per FR-29; GPU optional with performance warnings.
