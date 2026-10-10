@@ -1,9 +1,9 @@
 ---
 type: prd
 title: PC Part Picker & Builder — Individuals (v1)
-status: draft
+status: final
 created: 2026-10-03
-updated: 2026-10-10T12:44
+updated: 2026-10-10T16:35
 source_brief: _bmad-output/initiative-pc-part-picker-builder/brief-pc-part-picker-builder/brief-pc-part-picker-builder.md
 scope: v1 individuals portal
 skill: bmad-prd
@@ -15,7 +15,7 @@ skill: bmad-prd
 
 This PRD defines v1 functional and non-functional requirements for the **individuals portal** of PC Part Picker & Builder. Primary readers: product, UX, engineering, and QA. It builds on the finalized product brief (2026-10-03) and brainstorming intent; v2 organization/dealer scope lives in `addendum.md` only.
 
-Structure: **Glossary-anchored vocabulary**, features grouped with globally numbered **FRs**, user journeys **UJ-1…UJ-N**, success metrics **SM-*** cross-linked to FRs. Assumptions use `[ASSUMPTION]` inline and appear in §9.
+Structure: **Glossary-anchored vocabulary**, features grouped with globally numbered **FRs**, user journeys **UJ-1…UJ-N**, success metrics **SM-*** cross-linked to FRs. Assumptions use `[ASSUMPTION]` inline and appear in §11 (Assumptions Index).
 
 ## 1. Vision
 
@@ -521,7 +521,7 @@ Everything in §4 FR-1 through FR-34 plus Platform and cross-cutting NFRs below.
 
 ## 10. Open Questions
 
-1. Which India retailer/API feeds are in scope for day-one Catalog (sourcing contract)—blocks FR-26 implementation.
+1. Which India retailer/API feeds are in scope for day-one Catalog (sourcing contract)—blocks FR-26 implementation. **Owner:** product + architecture (`bmad-architecture`); **revisit:** before catalog epic implementation; not a PRD structure blocker.
 
 ## 11. Assumptions Index
 
@@ -542,4 +542,4 @@ Everything in §4 FR-1 through FR-34 plus Platform and cross-cutting NFRs below.
 
 ---
 
-*Next downstream: finish PRD (`bmad-prd`), then `bmad-spec`, optional `bmad-ux` / `bmad-architecture`, then `bmad-ticket` for epics and stories.*
+*Next downstream: `bmad-spec`, `bmad-ux`, `bmad-architecture`, `bmad-ticket`; invoke `bmad` for routing.*
