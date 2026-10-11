@@ -1,6 +1,7 @@
 ---
 id: SPEC-pc-part-picker-builder
 companions:
+  - ../architecture-pc-part-picker-builder/architecture-pc-part-picker-builder.md
   - glossary.md
   - catalog-sources.md
   - required-slots.md
