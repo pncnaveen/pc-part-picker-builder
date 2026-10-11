@@ -3,11 +3,11 @@ name: PC Part Picker & Builder (v1)
 type: architecture-spine
 purpose: build-substrate
 altitude: initiative
-paradigm: modular monolith (layered domain modules + async worker)
+paradigm: modular monolith (Nest API + React SPA + async worker; hexagonal domain core)
 scope: Individuals v1 — India catalog, build/compat loop, commerce scrape, auth, share, email
 status: final
 created: 2026-10-11
-updated: 2026-10-11
+updated: 2026-10-11T18:30
 binds: [CAP-1, CAP-2, CAP-3, CAP-4, CAP-5, CAP-6, CAP-7, CAP-8, CAP-9, CAP-10, CAP-11, CAP-12, CAP-13]
 sources:
   - ../spec-pc-part-picker-builder/spec-pc-part-picker-builder.md
@@ -18,13 +18,13 @@ companions: []
 
 ## Design Paradigm
 
-**Modular monolith:** one **web/API** deployable and one **worker** deployable share PostgreSQL and a Redis-backed job queue. Domain logic lives in modules (`catalog`, `build`, `compatibility`, `commerce`, `identity`, `notifications`, `social`, `performance`, `ops`); UI and route handlers sit at the edge and call application services only.
+**Modular monolith:** three deployables — **React SPA** (`frontend`), **NestJS HTTP API** (`api`), and **worker** (RabbitMQ consumers) — share **PostgreSQL**. **RabbitMQ** carries durable async work; **Redis** is cache and optional pub/sub hints only. Domain logic lives in packages (`catalog`, `build`, `compatibility`, `commerce`, `identity`, `notifications`, `social`, `performance`, `ops`); Nest controllers and React UI are adapters that call application services only.
 
 ```mermaid
 flowchart TB
   subgraph edge [Edge]
-    UI[Web UI]
-    API[HTTP / Server Actions]
+    UI[React SPA]
+    API[NestJS HTTP API]
   end
   subgraph app [Application services]
     BS[BuildService]
@@ -38,10 +38,11 @@ flowchart TB
   end
   subgraph data [Data]
     PG[(PostgreSQL)]
+    RD[(Redis cache)]
   end
-  subgraph async [Worker]
-    Q[Job queue]
-    SCR[Scrape + sync jobs]
+  subgraph async [Worker + messaging]
+    RMQ[RabbitMQ]
+    SCR[Scrape + sync]
     EM[Email sender]
   end
   UI --> API
@@ -53,15 +54,17 @@ flowchart TB
   BS --> PERF
   BS --> PG
   CS --> PG
+  CS --> RD
   SS --> PG
-  API --> Q
-  Q --> SCR
-  Q --> EM
+  API --> PG
+  API --> RMQ
+  RMQ --> SCR
+  RMQ --> EM
   SCR --> PG
   EM --> PG
 ```
 
-**Dependency rule:** `compatibility`, `substitute` rules, and `performance` tables do not import HTTP, UI, or job infrastructure. Workers call the same application services or domain modules the API uses—never a parallel code path for compat.
+**Dependency rule:** `compatibility`, `substitute` rules, and `performance` logic do not import Nest, React, Prisma, RabbitMQ, or Redis clients. Workers call the same application services or domain modules the API uses—never a parallel code path for compat.
 
 ## Invariants & Rules
 
@@ -69,7 +72,7 @@ flowchart TB
 
 - **Binds:** all
 - **Prevents:** Two teams picking different databases or caching writable build state in Redis.
-- **Rule:** All durable state (catalog, builds, accounts, share tokens, scrape capture metadata, email outbox) lives in **PostgreSQL**. Redis is queue/cache only—not authoritative for builds or catalog.
+- **Rule:** All durable state (catalog, builds, accounts, share tokens, scrape capture metadata, message **outbox**) lives in **PostgreSQL**. **Redis** is cache (and optional non-authoritative pub/sub hints) only. **RabbitMQ** is transport only—not authoritative for builds or catalog.
 
 ### AD-2 — Server-owned compatibility
 
@@ -99,7 +102,7 @@ flowchart TB
 
 - **Binds:** FR-26, FR-32, FR-33
 - **Prevents:** HTTP requests blocked on scrape or SMTP.
-- **Rule:** Scrape, BuildCores sync, and transactional email run in the **worker** via a **Redis-backed queue**. Web enqueues work and reads outbox/status. **Finalize succeeds in-app** even when summary email is retrying.
+- **Rule:** Scrape, BuildCores sync, and transactional email run in the **worker** via **RabbitMQ** (durable messages, retries, dead-letter). The API commits domain state and **outbox** rows in PostgreSQL, then a relay publishes to RabbitMQ—never blocking HTTP on scrape or SMTP. API and UI read outbox/job status from PostgreSQL. **Finalize succeeds in-app** even when summary email is retrying.
 
 ### AD-7 — Share and abuse
 
@@ -155,14 +158,28 @@ flowchart TB
 - **Prevents:** Mixed id formats and non-correlatable analytics across modules.
 - **Rule:** **ULID** for `Build`, `Part`, `Account`, and external-facing ids. Analytics events use envelope `schemaVersion: "v1"` with required `eventName`, `occurredAt`, `buildId?`, `accountId?`, `catalogReleaseIdAtEvaluation?`.
 
+### AD-16 — Layering (hexagonal core)
+
+- **Binds:** AD-2, all Nest/React modules
+- **Prevents:** Framework and ORM types leaking into compat rules or the React bundle deciding Invalid vs Warning.
+- **Rule:** **`packages/domain`** has zero imports from Nest, Prisma, RabbitMQ, or Redis. **Application services** (`BuildService`, etc.) orchestrate domain + repositories. **`apps/api`** and **`apps/worker`** are delivery adapters (controllers, guards, consumers). **`apps/frontend`** is a thin client: renders server compat results; holds pre-save Build state in-session only (AD-11).
+
+### AD-17 — Schema authority
+
+- **Binds:** AD-1, AD-14, AD-15
+- **Prevents:** Divergent table shapes between API, worker, and migrations.
+- **Rule:** Physical schema is defined in **`packages/db` (Prisma)** and applied via migrations. The spine ER diagram names entities and relationships only; column-level truth includes AD-14 evaluation snapshot fields on `Build` and outbox tables for AD-6.
+
 ```mermaid
 flowchart LR
-  UI[UI] --> API[API]
+  UI[React SPA] --> API[Nest API]
   API --> BS[BuildService]
   BS --> CE[Compat engine]
   BS --> DB[(PostgreSQL)]
   CE --> DB
-  Worker[Worker] --> DB
+  API --> RMQ[RabbitMQ]
+  Worker[Worker] --> RMQ
+  Worker --> DB
   Worker --> AMZ[amazon.in scrape]
   Worker --> BC[BuildCores sync]
 ```
@@ -174,25 +191,46 @@ flowchart LR
 | Naming (entities, files, interfaces, events) | Domain terms from `glossary.md` (`Build`, `Slot`, `Part`, `Finalized`); TypeScript `camelCase` in code, `snake_case` in PostgreSQL; HTTP JSON `camelCase`. |
 | Data & formats (ids, dates, error shapes, envelopes) | Internal ids: **ULID** (AD-15); money: integer **paise** (INR); instants: UTC `timestamptz`; API errors: `{ code, message, details? }` with stable `code` for compat conflicts referencing Slot/Part ids. |
 | State & cross-cutting (mutation, errors, logging, config, auth) | Build writes only through BuildService; structured JSON logs with `buildId`, `accountId`, `catalogReleaseId`; secrets via env; role `operator` for catalog curation (surface TBD). |
+| API ↔ SPA auth (AD-11) | **httpOnly** session cookies; prefer shared parent domain (`app` / `api` subdomains) or documented BFF if origins differ; CORS explicit in non-prod. |
 
 ## Stack
 
 | Name | Version |
 | --- | --- |
-| Node.js | 22 LTS |
+| Node.js | 24.21.0 |
 | TypeScript | 5.9 |
-| Next.js | 16.4.0 |
+| NestJS | 11.x |
 | React | 19.3 |
 | PostgreSQL | 16 |
 | Redis | 7.4 LTS |
-| BullMQ | 5.x |
-| Drizzle ORM | 0.44.x |
+| RabbitMQ | 4.x |
+| Prisma ORM | 6.x |
 
-Starter bias: **Next.js App Router** full-stack app + separate **worker** entry (`pnpm` workspace or second process in same repo). Versions pinned at repo init; code owns upgrades after cold-start.
+Starter bias: **pnpm** workspace — `apps/frontend` (React SPA), `apps/api` (NestJS), `apps/worker` (RabbitMQ consumers), shared `packages/domain`, `packages/db`, `packages/shared`. Versions pinned at repo init; code owns upgrades after cold-start.
+
+## Implementation patterns (v1)
+
+Patterns are **allowed tools**, not goals. Use them where they enforce ADs or simplify tests—not as ceremony.
+
+| Pattern | Where | Governs |
+| --- | --- | --- |
+| **Hexagonal layering** | `packages/domain` vs `apps/*` | AD-16, AD-2 |
+| **Repository** | `packages/db` | Hide Prisma; domain/application depend on interfaces or narrow repos |
+| **Unit of Work** | `BuildService` mutations | One transaction: slots + AD-14 eval snapshot + gates (AD-3, AD-14) |
+| **Transactional outbox** | `api` relay + `worker` | AD-6: publish to RabbitMQ only after PG commit |
+| **Choreographed steps** | Worker pipelines (scrape, sync, email) | Multi-step async with idempotent consumers, retries, DLQ—not HTTP sagas across DBs |
+| **Strategy / registry** | `domain/compatibility` | Versioned rule sets per catalog release (AD-2, AD-4) |
+| **Specification** | Catalog query layer | Composable filters for manual pick (AD-8) |
+| **Builder (GoF)** | Compat evaluation input, scrape/email job payloads | Step-wise assembly; **do not** name product types `BuildBuilder` |
+| **Adapter** | Worker infra | amazon.in scrape, BuildCores sync, SMTP |
+| **DTO + mapper** | Nest controllers | No Prisma models in HTTP JSON or React |
+| **Redis pub/sub (optional)** | Cache invalidation hints | Non-durable; never sole transport for AD-6 work |
+
+**Frontend structure:** feature-oriented folders (`features/build`, `features/catalog`); API client + hooks/stores; no compat severity logic in components (AD-2).
 
 ## Structural Seed
 
-**Deployment (v1):** `web` (Next.js), `worker` (queue consumer), managed **PostgreSQL**, managed **Redis**; optional object storage later for exports only. Environments: `local` (Docker Compose), `staging`, `production`. No multi-region.
+**Deployment (v1):** `frontend`, `api`, `worker`; managed **PostgreSQL**, **RabbitMQ**, **Redis**; optional object storage later for exports only. Environments: `local` (Docker Compose), `staging`, `production`. No multi-region.
 
 ```mermaid
 erDiagram
@@ -208,14 +246,15 @@ erDiagram
 ```text
 pc-part-picker-builder/
   apps/
-    web/                 # Next.js UI + API routes / server actions
-    worker/              # scrape, sync, email jobs
+    frontend/            # React SPA
+    api/                 # NestJS HTTP + outbox relay
+    worker/              # RabbitMQ consumers: scrape, sync, email
   packages/
-    domain/              # compatibility, substitute, performance, build rules
-    db/                  # Drizzle schema + migrations
-    shared/              # types, errors, analytics event names
+    domain/              # compatibility, substitute, performance, build rules (framework-free)
+    db/                  # Prisma schema + migrations + repositories
+    shared/              # types, errors, analytics event names, message contracts
   infra/
-    compose.yaml         # local postgres + redis
+    compose.yaml         # local postgres + rabbitmq + redis
 ```
 
 **Part ↔ ASIN (launch):** operator-maintained mapping imported via validated CSV/job; unmapped Parts use “find locally” (no broken amazon.in links). Search-assisted matching is not required for first vertical slice.
@@ -224,18 +263,18 @@ pc-part-picker-builder/
 
 | Capability / Area | Lives in | Governed by |
 | --- | --- | --- |
-| CAP-1 Context & budget | `web` + BuildService | AD-3, AD-11, AD-12 |
-| CAP-2 Catalog browse/search | CatalogService + `web` | AD-4, AD-5 |
-| CAP-3 Guided / manual assembly | BuildService + `web` | AD-2, AD-3, AD-8 |
+| CAP-1 Context & budget | `frontend` + BuildService | AD-3, AD-11, AD-12 |
+| CAP-2 Catalog browse/search | CatalogService + `frontend` | AD-4, AD-5 |
+| CAP-3 Guided / manual assembly | BuildService + `frontend` | AD-2, AD-3, AD-8 |
 | CAP-4 Complete / Finalized | BuildService | AD-3, AD-9 |
 | CAP-5 Compatibility | `domain/compatibility` | AD-2, AD-3 |
 | CAP-6 Upgrade from owned | BuildService + CatalogService | AD-12, AD-2 |
 | CAP-7 Substitutes | Substitute + BuildService | AD-9 |
 | CAP-8 Performance estimate | `domain/performance` | AD-10 |
 | CAP-9 Accounts & saved builds | Identity + BuildService | AD-11, AD-3 |
-| CAP-10 Share / suggest / compare | ShareService + `web` | AD-7, AD-2 |
+| CAP-10 Share / suggest / compare | ShareService + `frontend` | AD-7, AD-2 |
 | CAP-11 Catalog ops & ingest | Worker + CatalogService | AD-4, AD-5, AD-6 |
-| CAP-12 Link-out | `web` + CommerceListing | AD-5 |
+| CAP-12 Link-out | `frontend` + CommerceListing | AD-5 |
 | CAP-13 Email | Worker + notifications | AD-6 |
 
 ## Deferred
@@ -246,7 +285,7 @@ pc-part-picker-builder/
 | Full BuildCores import | Curated top-parts launch; expand via catalog releases. |
 | OAuth / social login | Explicit v1 non-goal. |
 | Separate compat microservice | Rule of three; in-process meets p95 until proven otherwise. |
-| Dedicated admin SPA | Operator flows can start as protected `/admin` routes; split if operator UX grows. |
+| Dedicated admin SPA | Operator flows can start as protected routes on `frontend` or `api`-served admin; split if operator UX grows. |
 | Search-assisted ASIN matcher | Manual/semi-automated mapping sufficient for seed catalog size. |
 | Build version history | FR-20 single mutable version only. |
 | Real-time chat / reviews | v1.1+ per spec non-goals. |

@@ -2,149 +2,138 @@
 
 | Field | Value |
 | --- | --- |
-| **Artifact** | `architecture-pc-part-picker-builder.md` (Stack table, lines 166–179) |
-| **Lens** | Version currency & reasonableness (as of **2026-10-11**) |
-| **Date** | 2026-10-11 |
-| **Method** | Cross-check spine pins against npm registry (`npm view`), official release posts (Next.js, React, PostgreSQL, Redis, Node.js Release schedule), and secondary changelogs where noted. Items without a primary registry or vendor source are marked **unverified**. |
+| **Artifact** | `architecture-pc-part-picker-builder.md` (Stack table, Implementation patterns) |
+| **Lens** | Version currency & reasonableness (as of **2026-10-12**) |
+| **Date** | 2026-10-12 |
+| **Method** | Cross-check spine pins against npm registry (`npm view`, 2026-10-12), Node.js / PostgreSQL / Redis / RabbitMQ vendor sources. Items without a primary registry or vendor source are marked **unverified**. |
 
 ## Verdict
 
-**PASS (with caveats)** — The pinned application stack is **coherent and implementable** for repo init in October 2026: Next.js 16.4.0 and React 19.3 align with each other and with current stable releases. Data plane choices (PostgreSQL 16, Redis 7.x LTS line, BullMQ 5.x, Drizzle 0.44.x) are **conservative but supported**. The main gaps are **precision** (Redis major-only, React/TS without patch), **LTS posture** (Node 22 is Maintenance LTS while Node 24 is Active LTS), and **intentional lag** vs npm `latest` on TypeScript, Drizzle, and BullMQ.
+**PASS (with caveats)** — The updated stack is **coherent and implementable** for repo init in October 2026: **Node 24.21.0** is the current **24.x LTS** patch; **NestJS 11.x** and **React 19.3** align with a split **API + SPA + worker** layout; **PostgreSQL 16**, **Redis 7.4 LTS**, and **RabbitMQ 4.x** are conservative, supported choices. **Prisma 6.x** is one major behind npm `latest` (7.x stable, 8.x pre-release)—acceptable intentional lag for cold-start. Main gaps: **major-only pins** (Nest 11.x, Prisma 6.x, RabbitMQ 4.x, TypeScript 5.9), **npm `latest` ahead on Nest 12** and **TypeScript 7.x**, and **Redis OSS 7.4 LTS nearing end of support** (plan upgrade path before late 2026).
 
 ## Spine pins (reference)
 
 | Name | Pinned | Assessment |
 | --- | --- | --- |
-| Node.js | 22 LTS | **Reasonable, not optimal for greenfield** |
-| TypeScript | 5.9 | **Reasonable** (5.x line current; registry `latest` is 7.x) |
-| Next.js | 16.4.0 | **Current / verified** |
-| React | 19.3 | **Current / verified** (pin `19.3.0` at init) |
-| PostgreSQL | 16 | **Supported / conservative** |
-| Redis | 7 | **Reasonable if 7.4 LTS** — pin is underspecified |
-| BullMQ | 5.x | **Reasonable** — npm `latest` is 6.x |
-| Drizzle ORM | 0.44.x | **Reasonable** — stable `latest` is 0.45.x |
+| Node.js | 24.21.0 | **Current / verified** (24.x LTS latest patch) |
+| TypeScript | 5.9 | **Reasonable** — registry `latest` is **7.0.2**; pin **5.9.3** at init |
+| NestJS | 11.x | **Reasonable** — npm `latest` is **12.1.2**; 11.x latest patch **11.2.7** |
+| React | 19.3 | **Current / verified** — npm **19.3.0** |
+| PostgreSQL | 16 | **Supported / conservative** — current minor **16.15** (2026-08-13) |
+| Redis | 7.4 LTS | **Reasonable** — minimum OSS patch **7.4.11+**; plan lifecycle |
+| RabbitMQ | 4.x | **Current** — latest stable **4.3.6** (2026-09-14) |
+| Prisma ORM | 6.x | **Reasonable** — 6.x latest **6.19.3**; npm `latest` prisma **8.0.0-rc.22**, client **7.10.0** |
 
 ---
 
 ## Per-component findings
 
-### Next.js 16.4.0 — **Verified, current**
+### Node.js 24.21.0 — **Verified, optimal for greenfield**
 
 | Check | Result |
 | --- | --- |
-| Exists on npm | Yes (`npm view next@16.4.0` → `16.4.0`) |
-| Release timing | Stable tag **2026-10-07**; announcement **2026-10-06** ([Next.js 16.4 blog](https://nextjs.org/blog/next-16-4)) |
-| Node engine | `>=20.9.0` (`npm view next@16.4.0 engines`) — satisfied by Node 22 |
-| React pairing | 16.4 ships with **React 19.3** per release notes |
+| Release | **2026-09-08** — [Node.js 24.21.0 (LTS)](https://nodejs.org/en/blog/release/v24.21.0) |
+| LTS posture | **24 “Krypton”** Active/Maintenance LTS; security support through **2028-04-30** (per [nodejs/release](https://github.com/nodejs/release/)) |
+| Spine fit | Exact patch pin is **good practice** for CI and Docker base images |
 
-**Advisory (verified):** Next.js blog (**2026-10-08**) announced an **out-of-band security release** for **2026-10-14** (Critical/High upstream deps). Treat **16.4.0** as the init pin, not a long-term freeze; plan patch uptake immediately after that release.
+**Advisory:** Node 24 entered security-fix-only phase after **2026-10-20** active support window (per community EOL trackers)—still supported; subscribe to security advisories.
 
-### React 19.3 — **Verified, current**
-
-| Check | Result |
-| --- | --- |
-| Release | **v19.3.0**, **2026-09-09** ([react.dev blog](https://react.dev/blog/2026/09/09/react-19-3)) |
-| npm `latest` | **19.3.0** (queried 2026-10-11) |
-
-Spine says `19.3` without patch; at repo init use **19.3.0** (or whatever patch Next 16.4.0 bundles).
-
-### Node.js 22 LTS — **Verified status; caveat on “which LTS”**
+### TypeScript 5.9 — **Verified line; registry ahead**
 
 | Check | Result |
 | --- | --- |
-| LTS class | **Maintenance LTS** (entered maintenance **2025-10-21**; EOL **2027-04-30**) per [nodejs/Release](https://github.com/nodejs/release/) |
-| Active LTS (Oct 2026) | **Node 24** (Active LTS from **2025-10-28**) |
+| npm `typescript@5.9` | **5.9.3** latest in 5.9 line |
+| npm `typescript` (latest) | **7.0.2** |
+| Spine | Major-only **5.9** — document intentional lag vs 7.x at repo init |
 
-**Interpretation:** “22 LTS” is **accurate** (still supported, widely used in CI/images) but **not the Active LTS** line for new production in October 2026. Acceptable for a pinned cold-start if the team values image stability; document a path to **Node 24** before 22 EOL.
-
-**Unverified:** Whether all target hosts (local Docker, staging, production) will ship **≥22.23.x** security patches by deploy; pin **minimum patch** in `.nvmrc` / CI when images are chosen.
-
-### TypeScript 5.9 — **Reasonable; behind registry `latest`**
+### NestJS 11.x — **Verified line; Nest 12 is current**
 
 | Check | Result |
 | --- | --- |
-| 5.9 stable | **5.9.2** (Aug 2025 announcement); npm shows **5.9.3** as latest 5.x |
-| npm `latest` (overall) | **7.0.2** (queried 2026-10-11) |
-| Also published | **6.0.x** per GitHub releases |
+| npm `@nestjs/core@11` | Latest **11.2.7** |
+| npm `@nestjs/core` (latest) | **12.1.2** |
+| `@nestjs/microservices@11` | Align at **11.2.7** for RabbitMQ transport |
+| Spine fit | **11.x** is a valid stability pin; verify Nest 11 + Node 24 in smoke test at init |
 
-**Interpretation:** **5.9** is a sensible match for a Next 16 + React 19 app without adopting TS 6/7 migration work. Not “bleeding edge.” Pin **5.9.3** (or exact version Next/ecosystem templates recommend) at init.
+**Unverified:** Breaking changes Nest 11 → 12 for your module layout (not required for PASS).
 
-### PostgreSQL 16 — **Supported; not latest major**
-
-| Check | Result |
-| --- | --- |
-| Support | Supported until **2028-11-09**; current minor **16.15** (**2026-08-13**) per [PostgreSQL versioning](https://www.postgresql.org/support/versioning/) |
-| Newer majors | **17**, **18** GA; **19** beta (Aug 2026 news) |
-
-**Interpretation:** Major **16** is **reasonable** for managed DB stability. Spine should treat **minor/patch** as operational (e.g. always **16.15+**), not “any 16.0.”
-
-**Unverified:** Drizzle 0.44.x + `postgres-js` driver behavior on PG 16.15-specific fixes (no incompatibility surfaced in this review).
-
-### Redis 7 — **Reasonable with specification gap**
+### React 19.3 — **Verified**
 
 | Check | Result |
 | --- | --- |
-| Line | **Redis 7.4** is **LTS** (Redis docs: 7.4 LTS, EOL **2029-12-01**) |
-| Latest 7.4 patch (cited) | **7.4.11** (**2026-08-17**, security release) per [redis/redis releases](https://github.com/redis/redis/releases/tag/7.4.11) |
-| Newer majors | **Redis 8.x** GA on GitHub releases |
+| npm `react@19.3` | **19.3.0** |
+| Spine | Pin **19.3.0** in `frontend` at init; pairs with Vite or similar SPA toolchain (not named in spine—**unverified** default) |
 
-**Interpretation:** Pin **“7”** is ambiguous (7.0 vs 7.2 vs **7.4**). For queue/cache with BullMQ, document **Redis 7.4.x** (or managed equivalent) and **minimum patch 7.4.11+** for security.
-
-**Unverified:** Managed Redis SKU mapping (ElastiCache, Upstash, etc.) to OSS **7.4.11** on day one.
-
-### BullMQ 5.x — **Verified line; npm default is 6.x**
+### PostgreSQL 16 — **Verified supported major**
 
 | Check | Result |
 | --- | --- |
-| 5.x line | Active; latest **5.81.5** (`npm view bullmq@5.81.5`) |
-| npm `latest` | **6.3.12** (queried 2026-10-11) |
-| Redis client note | BullMQ docs: `redis` **>= 5.0.0** when using node-redis adapter |
+| Current minor | **16.15** (2026-08-13) — [release notes](https://www.postgresql.org/docs/16/release-16-15.html) |
+| Support | Major supported until **2028-11-09** ([versioning policy](https://www.postgresql.org/support/versioning/)) |
+| Spine | Major-only **16** — use image/deployment **≥ 16.15** |
 
-**Interpretation:** **5.x** is **reasonable** for a known API surface; staying on 5.x while `latest` is 6.x is a **deliberate** choice—record why (stability, worker parity) in repo init or ADR.
-
-**Unverified:** Breaking changes and migration effort from BullMQ 5 → 6 for this worker topology (scrape, sync, email).
-
-### Drizzle ORM 0.44.x — **Reasonable; one minor behind stable**
+### Redis 7.4 LTS — **Verified; lifecycle watch**
 
 | Check | Result |
 | --- | --- |
-| 0.44 line | Exists; npm lists through **0.44.7** (`npm view drizzle-orm@0.44`) |
-| npm `latest` (stable) | **0.45.4** (**2026-10-08** per changelog aggregators) |
-| 1.0 | **1.0.0-rc** builds on npm (Sep 2026) |
+| Latest 7.4 OSS | **7.4.11** (2026-08-17) — security release ([release tag](https://github.com/redis/redis/releases/tag/7.4.11)) |
+| Role in spine | Cache + optional pub/sub hints only (AD-1, AD-6); not job transport |
+| Lifecycle | **Redis Software 7.4** EOL **2026-11-30** cited in vendor docs—for OSS/managed SKUs, confirm provider matrix and plan **7.8+ / 8.x** before production hardening |
 
-**Interpretation:** **0.44.x** is a valid cold-start pin; bump to **0.44.7** (or latest 0.44 patch) at init. Moving to **0.45.x** is low-friction when convenient; **1.0-rc** is not appropriate for spine “pinned at init” without explicit risk acceptance.
+### RabbitMQ 4.x — **Verified current**
+
+| Check | Result |
+| --- | --- |
+| Latest | **4.3.6** ([download docs](https://www.rabbitmq.com/docs/download), 2026-09-14) |
+| Docker | `rabbitmq:4.3.6-management` ([Docker Hub](https://hub.docker.com/_/rabbitmq)) |
+| Erlang | 4.3.6 supports OTP **27.0–28.x** ([which-erlang](https://www.rabbitmq.com/docs/which-erlang)) |
+| Nest integration | Use `@nestjs/microservices` (RMQ) or `amqplib` (**2.2.0** on npm)—pair with spine **outbox** pattern (AD-6) |
+
+**Advisory:** Configure **DLQ**, consumer **prefetch**, and **idempotent** handlers for scrape/email; not a version issue but required for AD-6 semantics.
+
+### Prisma ORM 6.x — **Verified line; lag vs latest**
+
+| Check | Result |
+| --- | --- |
+| npm `prisma@6` | Latest **6.19.3** |
+| npm `@prisma/client@6` | **6.19.3** (keep CLI and client in lockstep) |
+| npm `prisma` (latest) | **8.0.0-rc.22** (pre-release) |
+| npm `@prisma/client` (latest) | **7.10.0** |
+| Spine fit | **6.x** conservative; ULID and `snake_case` columns (AD-15, conventions) are straightforward in Prisma 6 |
+
+**Unverified:** Prisma 6 + NestJS 11 + Node 24 together in this repo (expected to work; confirm at `prisma init`).
 
 ---
 
 ## Cross-stack coherence
 
-| Concern | Status |
+| Pairing | Assessment |
 | --- | --- |
-| Next ↔ React | **Aligned** (16.4 + 19.3) |
-| Next ↔ Node | **OK** (engines `>=20.9.0`; 22 and 24 both satisfy) |
-| Worker ↔ Redis ↔ BullMQ | **OK** assuming **Redis 7.4+** and explicit `redis` / ioredis versions chosen at init |
-| ORM ↔ PostgreSQL | **Plausible**; no version conflict identified |
-| TypeScript ↔ Next | **OK** on 5.9; verify `next` template `tsconfig` at scaffold time |
+| Node 24 + Nest 11 + Prisma 6 | **OK** — standard server stack; pin exact patches in lockfile |
+| Nest API + React SPA + httpOnly cookies | **OK** — spine documents subdomain/BFF note; not a version issue |
+| RabbitMQ (AD-6) + Redis (cache) + PostgreSQL (outbox) | **OK** — three infra components; Compose should pin **4.3.6**, **7.4.11+**, **16.15** |
+| Worker consumers + same `packages/domain` as API | **OK** — aligns with AD-16 |
 
 ---
 
 ## Unverified / out of scope for this review
 
-- Exact **docker-compose** image tags for Postgres/Redis in `infra/compose.yaml` (not present in spine).
-- **BullMQ 6** vs **5** feature/security delta for this product.
-- **License / export** constraints for scrape workloads on chosen Node LTS images.
-- **Node.js release-schedule evolution** blog (future yearly majors)—only **current** [nodejs/Release](https://github.com/nodejs/release/) table was used for 22 vs 24.
-- Production **managed service** default versions matching spine majors.
+- Exact **docker-compose** image tags in `infra/compose.yaml` (not present in repo yet).
+- **Nest 12** vs **11** migration effort.
+- **Prisma 7** feature/security delta vs **6.19.x** for this schema size.
+- **Vite / React Router** versions for `apps/frontend` (spine does not pin bundler).
+- Production **managed** RabbitMQ/Redis/Postgres SKU versions vs OSS pins.
+- **review-adversarial.md** (2026-10-11) — still valid on domain ADs; re-run if you want AD-16/17 twin-unit pass after stack split.
 
 ---
 
 ## Recommendations (spine or repo init, not blocking)
 
-1. **Node:** Keep **22** only with explicit “Maintenance LTS” note, or prefer **24 Active LTS** for greenfield; set minimum **patch** in toolchain files.
-2. **Redis:** Change pin text to **Redis 7.4 (LTS)** and minimum security patch level.
-3. **Patches:** At init, pin exact versions: `next@16.4.0`, `react@19.3.0`, `typescript@5.9.3`, `drizzle-orm@0.44.7`, `bullmq@5.81.5` (or current 5.x patch), `postgres` image **16.15+**.
-4. **Security:** Schedule **Next.js patch** immediately after **2026-10-14** OOB release; subscribe to Node 22 maintenance releases until Node 24 migration.
-5. **Document lag:** One line in Stack table or companion ADR for **BullMQ 5.x** and **Drizzle 0.44.x** vs npm `latest`.
+1. **At init, pin exact versions:** `node@24.21.0`, `typescript@5.9.3`, `@nestjs/core@11.2.7`, `react@19.3.0`, `prisma@6.19.3`, `@prisma/client@6.19.3`.
+2. **Infra images:** `postgres:16.15` (or newer 16.x), `redis:7.4.11` (or newer 7.4.x), `rabbitmq:4.3.6-management`.
+3. **Document lag:** One line in README or toolchain ADR: **Nest 11** vs npm 12, **Prisma 6** vs 7/8, **TypeScript 5.9** vs 7.
+4. **Redis lifecycle:** Add a **Deferred** or ops note to evaluate **Redis 8.x** (or provider equivalent) before **2026-11-30** if using vendor 7.4 LTS timelines.
+5. **Security:** Subscribe to Node 24, Nest, Prisma, RabbitMQ, and Redis security advisories; bump patches on cadence.
 
 ---
 
@@ -152,10 +141,9 @@ Spine says `19.3` without patch; at repo init use **19.3.0** (or whatever patch 
 
 | Source | Used for |
 | --- | --- |
-| npm registry (`npm view`, 2026-10-11) | next, react, typescript, drizzle-orm, bullmq versions |
-| [nextjs.org/blog/next-16-4](https://nextjs.org/blog/next-16-4) | 16.4.0 release, React 19.3 bundling |
-| [react.dev/blog/2026/09/09/react-19-3](https://react.dev/blog/2026/09/09/react-19-3) | React 19.3.0 date |
-| [github.com/nodejs/release](https://github.com/nodejs/release/) | Node 22 Maintenance vs 24 Active LTS |
-| [postgresql.org/support/versioning](https://www.postgresql.org/support/versioning/) | PG 16 support EOL, 16.15 minor |
-| [github.com/redis/redis/releases/tag/7.4.11](https://github.com/redis/redis/releases/tag/7.4.11) | Redis 7.4.11 date / security |
-| [docs.bullmq.io](https://docs.bullmq.io/) / GitHub releases (secondary) | BullMQ 5.x changelog line |
+| npm registry (`npm view`, 2026-10-12) | @nestjs/core, @nestjs/microservices, prisma, @prisma/client, react, typescript, amqplib |
+| [nodejs.org Node 24.21.0](https://nodejs.org/en/blog/release/v24.21.0) | Node patch verification |
+| [github.com/nodejs/release](https://github.com/nodejs/release/) | LTS schedule |
+| [postgresql.org versioning / 16.15 release](https://www.postgresql.org/support/versioning/) | PG 16 minor |
+| [github.com/redis/redis 7.4.11](https://github.com/redis/redis/releases/tag/7.4.11) | Redis patch / security |
+| [rabbitmq.com download / release information](https://www.rabbitmq.com/docs/download) | RabbitMQ 4.3.6 |
