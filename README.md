@@ -8,18 +8,25 @@ This repository uses the **[BMad Method](https://docs.bmad-method.org/)** (v7 sk
 
 ## Planning artifacts (current state)
 
-| Stage | Location | Status |
-|--------|----------|--------|
-| Initiative | `_bmad-output/initiative-pc-part-picker-builder/` | Active |
-| Brainstorm | `.../brainstorm-pc-parts-picker-builder/` | Complete |
-| Product brief | `.../brief-pc-part-picker-builder/` | Ready |
-| PRD | `.../prd-pc-part-picker-builder/` | **Draft** (not finalized) |
+| Stage            | Location                                          | Status                |
+| ---------------- | ------------------------------------------------- | --------------------- |
+| Initiative       | `_bmad-output/initiative-pc-part-picker-builder/` | Active                |
+| Brainstorm       | `.../brainstorm-pc-parts-picker-builder/`         | Complete              |
+| Product brief    | `.../brief-pc-part-picker-builder/`               | Ready                 |
+| PRD              | `.../prd-pc-part-picker-builder/`                 | **Final**             |
+| Spec             | `.../spec-pc-part-picker-builder/`                | Final                 |
+| Architecture     | `.../architecture-pc-part-picker-builder/`        | Final                 |
+| UX               | `.../ux-pc-part-picker-builder/`                  | Final                 |
+| Epics            | `_bmad-output/planning-artifacts/epics.md`        | Ready for development |
+| Application code | `apps/`, `packages/` (beyond `domain` stub)       | Epic 1 in progress    |
 
 Key files:
 
-- `prd.md` — requirements (FR-1–FR-31), India launch, email auth, link-out v1
-- `addendum.md` — catalog SLA, substitutes matrix, v2 backlog
-- `.memlog.md` — run decisions (resume PRD work from here)
+- `prd-pc-part-picker-builder.md` — requirements (FRs), India launch, journeys UJ-1–4
+- `architecture-pc-part-picker-builder.md` — stack, ADs, monorepo layout
+- `EXPERIENCE.md` / `DESIGN.md` — UX contract (guided POC + admin)
+- `epics.md` — stories and acceptance criteria
+- `CONTRIBUTING.md` — git workflow, lint/format, coding standards
 
 ## Repository layout
 
@@ -29,6 +36,10 @@ pc-part-picker-builder/
 ├── _bmad-output/          # Generated planning & implementation artifacts
 ├── .agents/skills/        # Cursor skill copies (optional in git — see .gitignore)
 ├── docs/                  # Project knowledge (optional; referenced by BMM config)
+├── packages/              # domain, db, shared (Epic 1+)
+├── apps/                  # frontend, api, worker (Epic 1+)
+├── CONTRIBUTING.md        # Git workflow and coding standards
+├── AGENTS.md              # Agent instructions (managed block)
 ├── .gitignore
 └── README.md
 ```
@@ -96,36 +107,40 @@ You should get merged JSON config without errors.
 
 In Cursor Agent chat:
 
-| Intent | Invoke |
-|--------|--------|
-| Where am I / what’s next? | `/bmad-help` or “bmad help” |
-| Resume PRD | `bmad-prd` and point at `_bmad-output/initiative-pc-part-picker-builder/prd-pc-part-picker-builder/` |
-| Finalize PRD later | Same skill; say **finalize** when ready |
-| UX after PRD | `/bmad-ux` |
-| Architecture | `/bmad-architecture` |
-| Epics & stories | `/bmad-create-epics-and-stories` |
+| Intent                    | Invoke                                                                                               |
+| ------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Where am I / what’s next? | `/bmad-help` or “bmad help”                                                                          |
+| Resume PRD                | `bmad-prd` and point at `_bmad-output/initiative-pc-part-picker-builder/prd-pc-part-picker-builder/` |
+| Finalize PRD later        | Same skill; say **finalize** when ready                                                              |
+| UX after PRD              | `/bmad-ux`                                                                                           |
+| Architecture              | `/bmad-architecture`                                                                                 |
+| Epics & stories           | `/bmad-create-epics-and-stories`                                                                     |
 
 Catalog of skills: `_bmad/_config/bmad-help.csv`.
 
 ## Git and what to commit
 
-| Path | Commit? |
-|------|---------|
-| `_bmad-output/` | **Yes** — product artifacts |
-| `_bmad/` | **Yes** — shared BMad config and scripts |
-| `_bmad/custom/config.user.toml` | **No** — personal (gitignored) |
-| `.agents/` | **Optional** — ignored by default; reinstall via BMad if omitted |
+| Path                            | Commit?                                                          |
+| ------------------------------- | ---------------------------------------------------------------- |
+| `_bmad-output/`                 | **Yes** — product artifacts                                      |
+| `_bmad/`                        | **Yes** — shared BMad config and scripts                         |
+| `_bmad/custom/config.user.toml` | **No** — personal (gitignored)                                   |
+| `.agents/`                      | **Optional** — ignored by default; reinstall via BMad if omitted |
 
 Never commit `.env`, keys, or credential files (patterns in `.gitignore`).
 
-## Suggested workflow after PRD finalize
+## Development
 
-1. `bmad-prd` → finalize PRD  
-2. `bmad-ux` → design + experience docs  
-3. `bmad-architecture` → technical decisions  
-4. `bmad-create-epics-and-stories` → epics/stories  
-5. `bmad-sprint-planning` → sprint status  
-6. `bmad-build` → implementation  
+- **Node** 24.21.0, **pnpm** workspace — see `package.json` and [`CONTRIBUTING.md`](CONTRIBUTING.md).
+- Root checks: `pnpm install`, `pnpm format:check`, `pnpm lint`, `pnpm lint:boundaries`.
+
+## Suggested workflow (planning → build)
+
+Planning artifacts above are complete. Implementation:
+
+1. `bmad-sprint-planning` → sprint status (optional)
+2. Epic 1 stories in `epics.md` → `feat-1.x` branches off `development`
+3. `bmad-build` → implementation per story
 
 Use `bmad-correct-course` if scope shifts mid-stream.
 
