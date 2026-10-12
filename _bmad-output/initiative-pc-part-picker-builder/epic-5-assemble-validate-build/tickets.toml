@@ -1,0 +1,100 @@
+# Stories — build order. AC: planning-artifacts/epics.md
+
+[[entry]]
+id = 1
+type = "story"
+title = "Set budget and over-budget acknowledgment"
+description = "Budget INR running total."
+verify = "Over budget shows acknowledgment path."
+covers = ["FR-1", "FR-8", "FR-9", "FR-10", "FR-11"]
+after = []
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 2
+type = "story"
+title = "Declare use, workloads, and display"
+description = "Context for performance."
+verify = "Workloads and display stored on build."
+covers = ["FR-1", "FR-8", "FR-9", "FR-10", "FR-11"]
+after = [1]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Register owned parts and slot locks"
+description = "Owned inventory locks slots."
+verify = "Owned parts lock slots per AD-12."
+covers = ["FR-1", "FR-8", "FR-9", "FR-10", "FR-11"]
+after = [2]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Guided build recommendations"
+description = "Guided path per slot."
+verify = "Recommendations refresh compat each step."
+covers = ["FR-1", "FR-8", "FR-9", "FR-10", "FR-11"]
+after = [3]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 5
+type = "story"
+title = "Manual slot selection with compat preview"
+description = "Picker with preview eval."
+verify = "Invalid blocked before commit; p95 target."
+covers = ["FR-1", "FR-8", "FR-9", "FR-10", "FR-11"]
+after = [4]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 6
+type = "story"
+title = "Live build summary"
+description = "Summary panel FR-10."
+verify = "Summary updates on slot changes."
+covers = ["FR-1", "FR-8", "FR-9", "FR-10", "FR-11"]
+after = [5]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 7
+type = "story"
+title = "Server compatibility on every mutation"
+description = "Server-owned compat FR-11."
+verify = "Every mutation returns eval snapshot."
+covers = ["FR-1", "FR-8", "FR-9", "FR-10", "FR-11"]
+after = [6]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 8
+type = "story"
+title = "Substitute discovery and apply"
+description = "Substitute workflow FR-14-16."
+verify = "Unavailable parts surface substitutes."
+covers = ["FR-1", "FR-8", "FR-9", "FR-10", "FR-11"]
+after = [7]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 9
+type = "story"
+title = "Performance estimate tiers"
+description = "Directional tiers FR-17-18."
+verify = "Tiers with disclaimer; hidden when Invalid."
+covers = ["FR-1", "FR-8", "FR-9", "FR-10", "FR-11"]
+after = [8]
+hitl = false
+risk = "medium"

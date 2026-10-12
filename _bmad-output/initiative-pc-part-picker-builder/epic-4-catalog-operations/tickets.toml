@@ -1,0 +1,56 @@
+# Stories — build order. AC: planning-artifacts/epics.md
+
+[[entry]]
+id = 1
+type = "story"
+title = "Catalog release and BuildCores spec ingest"
+description = "Spec ingest and release versioning."
+verify = "Active catalog release with spec parts."
+covers = ["FR-25", "FR-26", "FR-27"]
+after = []
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 2
+type = "story"
+title = "Operator Part ↔ ASIN CSV import"
+description = "Admin CSV mapping."
+verify = "Operator imports ASIN mappings."
+covers = ["FR-25", "FR-26", "FR-27"]
+after = [1]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Commerce scrape worker job"
+description = "amazon.in scrape worker."
+verify = "Worker updates price/availability timestamps."
+covers = ["FR-25", "FR-26", "FR-27"]
+after = [2]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Global catalog incident banner"
+description = "Banner when scrape down >24h."
+verify = "Incident flag surfaces global banner."
+covers = ["FR-25", "FR-26", "FR-27"]
+after = [3]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 5
+type = "story"
+title = "Activate compat rules for catalog release"
+description = "Versioned rules per release."
+verify = "Compat eval uses active release rules."
+covers = ["FR-25", "FR-26", "FR-27"]
+after = [4]
+hitl = false
+risk = "medium"

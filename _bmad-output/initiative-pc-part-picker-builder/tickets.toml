@@ -1,1 +1,78 @@
-# Epics are added with bmad-ticket after spec/PRD are ready.
+# Build order: foundation → catalog ops → identity → browse → assemble → save → share → link-out → email
+# Story detail and AC: planning-artifacts/epics.md
+
+[[epic]]
+id = 1
+slug = "epic-1-application-foundation"
+title = "Application foundation"
+covers = []
+
+[[epic]]
+id = 4
+slug = "epic-4-catalog-operations"
+title = "Catalog operations & commerce freshness"
+covers = ["FR-25", "FR-26", "FR-27"]
+after = [{ epic = 1, needs = "postgres, worker, api baseline" }]
+
+[[epic]]
+id = 2
+slug = "epic-2-identity-session-build"
+title = "Identity & in-session build shell"
+covers = ["FR-30", "FR-19"]
+after = [{ epic = 1, needs = "api and database connectivity" }]
+
+[[epic]]
+id = 3
+slug = "epic-3-catalog-browse-search"
+title = "India catalog browse & search"
+covers = ["FR-5", "FR-6", "FR-7", "FR-27"]
+after = [
+  { epic = 1, needs = "frontend shell" },
+  { epic = 4, needs = "seed catalog data" },
+  { epic = 2, needs = "session-capable api" },
+]
+
+[[epic]]
+id = 5
+slug = "epic-5-assemble-validate-build"
+title = "Assemble & validate a compatible build"
+covers = ["FR-1", "FR-2", "FR-3", "FR-4", "FR-8", "FR-9", "FR-10", "FR-11", "FR-12", "FR-13", "FR-14", "FR-15", "FR-16", "FR-17", "FR-18"]
+after = [
+  { epic = 2, needs = "in-session build" },
+  { epic = 3, needs = "catalog ui" },
+  { epic = 4, needs = "catalog and compat rules active" },
+]
+
+[[epic]]
+id = 6
+slug = "epic-6-save-finalize-builds"
+title = "Save, finalize & manage builds"
+covers = ["FR-19", "FR-20", "FR-21", "FR-29"]
+after = [{ epic = 5, needs = "full assembly loop" }]
+
+[[epic]]
+id = 7
+slug = "epic-7-share-suggest-compare"
+title = "Share, suggest & compare"
+covers = ["FR-22", "FR-23", "FR-24"]
+after = [{ epic = 6, needs = "saved builds and eval snapshot" }]
+
+[[epic]]
+id = 8
+slug = "epic-8-retailer-linkout"
+title = "Retailer link-out"
+covers = ["FR-31"]
+after = [
+  { epic = 3, needs = "part detail and listings" },
+  { epic = 6, needs = "build with selected parts" },
+]
+
+[[epic]]
+id = 9
+slug = "epic-9-transactional-emails"
+title = "Transactional build emails"
+covers = ["FR-32", "FR-33", "FR-34"]
+after = [
+  { epic = 6, needs = "finalize" },
+  { epic = 4, needs = "commerce timestamps" },
+]

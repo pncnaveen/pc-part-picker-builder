@@ -1,0 +1,56 @@
+# Stories — build order. AC: planning-artifacts/epics.md
+
+[[entry]]
+id = 1
+type = "story"
+title = "Register with email and password"
+description = "Account creation with verified=false."
+verify = "Register creates account and triggers verification."
+covers = ["FR-30", "FR-19"]
+after = []
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 2
+type = "story"
+title = "Verify email before save eligibility"
+description = "Verification gate for save."
+verify = "Unverified cannot save; verified can."
+covers = ["FR-30", "FR-19"]
+after = [1]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Login, session, and logout"
+description = "httpOnly session cookies."
+verify = "Login establishes session; logout clears it."
+covers = ["FR-30", "FR-19"]
+after = [2]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Password reset"
+description = "Reset flow per FR-30."
+verify = "User can reset password via email link."
+covers = ["FR-30", "FR-19"]
+after = [3]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 5
+type = "story"
+title = "Start an in-session Build"
+description = "Anonymous/session build without save."
+verify = "Start build returns build id for session."
+covers = ["FR-30", "FR-19"]
+after = [4]
+hitl = false
+risk = "medium"

@@ -1,0 +1,56 @@
+# Stories — build order. AC: planning-artifacts/epics.md
+
+[[entry]]
+id = 1
+type = "story"
+title = "Save build (verified accounts only)"
+description = "Save gate FR-19."
+verify = "Verified user saves build; list shows builds."
+covers = ["FR-19", "FR-20", "FR-21", "FR-29"]
+after = []
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 2
+type = "story"
+title = "List saved builds"
+description = "Dashboard list."
+verify = "List shows name status budget."
+covers = ["FR-19", "FR-20", "FR-21", "FR-29"]
+after = [1]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Open and edit saved build with re-evaluation"
+description = "Re-eval on open FR-20."
+verify = "Open triggers compat refresh."
+covers = ["FR-19", "FR-20", "FR-21", "FR-29"]
+after = [2]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Delete build and revoke share tokens"
+description = "Delete FR-21."
+verify = "Delete revokes share tokens."
+covers = ["FR-19", "FR-20", "FR-21", "FR-29"]
+after = [3]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 5
+type = "story"
+title = "Complete and finalize with required Slots"
+description = "Complete gate FR-29."
+verify = "Required slots enforced; Invalid blocks."
+covers = ["FR-19", "FR-20", "FR-21", "FR-29"]
+after = [4]
+hitl = false
+risk = "medium"

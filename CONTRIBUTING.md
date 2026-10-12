@@ -10,7 +10,7 @@ Thanks for working on PC Part Picker Builder. This doc covers **git workflow**, 
 | `development`     | Integration (created from `main` once, then long-lived)       |
 | `feat-<story-id>` | Story / epic slice / feature work — branch from `development` |
 
-1. Branch from `development`: `feat-1.1`, `feat-5.4`, etc. (id from [`epics.md`](_bmad-output/planning-artifacts/epics.md) or [`tickets.toml`](_bmad-output/initiative-pc-part-picker-builder/tickets.toml)).
+1. Branch from `development`: `feat-1.1`, `feat-5.4`, etc. (story ref from `tickets.py` / epic `tickets.toml` — e.g. **1.1** = Epic 1 story 1; see [`initiative-pc-part-picker-builder/tickets.toml`](_bmad-output/initiative-pc-part-picker-builder/tickets.toml)).
 2. Implement and test locally.
 3. Open a **PR into `development`**.
 4. After merge, promote **`development` → `main`** via PR when ready for production.

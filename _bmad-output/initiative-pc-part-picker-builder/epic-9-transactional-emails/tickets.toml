@@ -1,0 +1,45 @@
+# Stories — build order. AC: planning-artifacts/epics.md
+
+[[entry]]
+id = 1
+type = "story"
+title = "Outbox relay and email worker plumbing"
+description = "AD-6 outbox + worker."
+verify = "Email jobs process via outbox."
+covers = ["FR-32", "FR-33", "FR-34"]
+after = []
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 2
+type = "story"
+title = "Build summary email on finalize"
+description = "FR-32."
+verify = "Finalize triggers summary email when allowed."
+covers = ["FR-32", "FR-33", "FR-34"]
+after = [1]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Price and availability alert emails"
+description = "FR-33 batched alerts."
+verify = "Alerts respect 48h cap."
+covers = ["FR-32", "FR-33", "FR-34"]
+after = [2]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Email notification settings"
+description = "FR-34 toggles."
+verify = "User can opt out of email types."
+covers = ["FR-32", "FR-33", "FR-34"]
+after = [3]
+hitl = false
+risk = "medium"

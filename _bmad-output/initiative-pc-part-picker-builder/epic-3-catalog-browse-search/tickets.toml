@@ -1,0 +1,56 @@
+# Stories — build order. AC: planning-artifacts/epics.md
+
+[[entry]]
+id = 1
+type = "story"
+title = "Browse Parts by Slot category"
+description = "Slot-aligned category browse."
+verify = "User browses parts by slot with region filter."
+covers = ["FR-5", "FR-6", "FR-7", "FR-27"]
+after = []
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 2
+type = "story"
+title = "Part detail with compatibility-oriented specs"
+description = "Detail shows spec attrs for compat."
+verify = "Part detail renders spec fields."
+covers = ["FR-5", "FR-6", "FR-7", "FR-27"]
+after = [1]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Text search Parts"
+description = "Search with slot context."
+verify = "Search returns matches; empty is not error."
+covers = ["FR-5", "FR-6", "FR-7", "FR-27"]
+after = [2]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Staleness badges on Part cards"
+description = "Price/availability staleness badges."
+verify = "Badges follow catalog-freshness thresholds."
+covers = ["FR-5", "FR-6", "FR-7", "FR-27"]
+after = [3]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 5
+type = "story"
+title = "Build-level stale commerce summary"
+description = "Summary stale counts FR-27."
+verify = "Build summary shows stale line count."
+covers = ["FR-5", "FR-6", "FR-7", "FR-27"]
+after = [4]
+hitl = false
+risk = "medium"

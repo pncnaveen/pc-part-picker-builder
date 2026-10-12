@@ -1,0 +1,45 @@
+# Stories — build order. AC: planning-artifacts/epics.md
+
+[[entry]]
+id = 1
+type = "story"
+title = "Link-out for mapped Parts"
+description = "amazon.in URLs."
+verify = "Mapped parts open retailer link."
+covers = ["FR-31"]
+after = []
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 2
+type = "story"
+title = 'Unmapped Part "find locally" UX'
+description = "No broken links."
+verify = "Unmapped shows find locally."
+covers = ["FR-31"]
+after = [1]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Stale price confirmation on link-out"
+description = "Stale confirm FR-31."
+verify = "Stale price prompts confirmation."
+covers = ["FR-31"]
+after = [2]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Export build link-out list"
+description = "Export link-outs."
+verify = "Export lists parts with link-outs."
+covers = ["FR-31"]
+after = [3]
+hitl = false
+risk = "medium"

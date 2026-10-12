@@ -1,0 +1,57 @@
+# Stories — build order. AC: planning-artifacts/epics.md
+
+[[entry]]
+id = 1
+type = "story"
+title = "Monorepo scaffold and pinned toolchain"
+description = "pnpm workspace apps and packages with pinned Node 24.21.0 / TS 5.9."
+verify = "Clone, pnpm install, and TypeScript build succeed at root."
+covers = []
+after = []
+hitl = false
+risk = "medium"
+notes = ["Partial: root toolchain and packages/domain stub exist; apps/* not scaffolded yet."]
+
+[[entry]]
+id = 2
+type = "story"
+title = "Local infrastructure via Docker Compose"
+description = "Postgres 16, RabbitMQ 4.x, Redis 7.4 via infra/compose.yaml."
+verify = "Compose up; services accept connections on documented ports."
+covers = []
+after = [1]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Prisma baseline and API health check"
+description = "Minimal schema and Nest GET /health with DB reachability."
+verify = "Migrate and /health returns success when compose is up."
+covers = []
+after = [2]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Hexagonal package boundaries"
+description = "domain free of framework imports; worker skeleton connects to RMQ."
+verify = "pnpm lint:boundaries passes; worker boots."
+covers = []
+after = [3]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 5
+type = "story"
+title = "React SPA shell and API CORS baseline"
+description = "Vite React app displays API health."
+verify = "SPA loads and shows health from Nest with CORS configured."
+covers = []
+after = [4]
+hitl = false
+risk = "medium"

@@ -19,7 +19,7 @@ First-time and occasional builders complete compatible builds under budget using
 
 ## Requirements
 
-Requirement source: PRD FR-1 through FR-31 (draft). Epics and story entries will cite these ids after `bmad-ticket` slices the spec.
+Requirement source: PRD FRs and `planning-artifacts/epics.md`. Story breakdown: `tickets.toml` and `epic-*/tickets.toml` under this initiative (2026-10-12).
 
 ## Done when
 

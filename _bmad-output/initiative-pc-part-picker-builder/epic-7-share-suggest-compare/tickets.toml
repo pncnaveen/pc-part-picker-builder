@@ -1,0 +1,45 @@
+# Stories — build order. AC: planning-artifacts/epics.md
+
+[[entry]]
+id = 1
+type = "story"
+title = "Create share link"
+description = "Share FR-22 Compatible/Warning only."
+verify = "Opaque token share link created."
+covers = ["FR-22", "FR-23", "FR-24"]
+after = []
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 2
+type = "story"
+title = "View shared build read-only"
+description = "Read-only share view."
+verify = "Guest sees build without mutate."
+covers = ["FR-22", "FR-23", "FR-24"]
+after = [1]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Suggest compatible swaps on shared build"
+description = "Suggest FR-23."
+verify = "Owner accept/reject suggestions."
+covers = ["FR-22", "FR-23", "FR-24"]
+after = [2]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Compare two builds"
+description = "Compare FR-24."
+verify = "Side-by-side budget compat performance diffs."
+covers = ["FR-22", "FR-23", "FR-24"]
+after = [3]
+hitl = false
+risk = "medium"
