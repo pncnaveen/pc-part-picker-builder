@@ -25,8 +25,10 @@ Key files:
 - `prd-pc-part-picker-builder.md` — requirements (FRs), India launch, journeys UJ-1–4
 - `architecture-pc-part-picker-builder.md` — stack, ADs, monorepo layout
 - `EXPERIENCE.md` / `DESIGN.md` — UX contract (guided POC + admin)
-- `epics.md` — stories and acceptance criteria
+- `epics.md` — stories and acceptance criteria (full acceptance criteria)
+- `initiative-pc-part-picker-builder/tickets.toml` — epic build order; `epic-*/tickets.toml` — story breakdown (refs **1.1**, **5.4**, …)
 - `CONTRIBUTING.md` — git workflow, lint/format, coding standards
+- `AGENTS.md` — agent policy (Cursor reads this at repo root)
 
 ## Repository layout
 
@@ -51,9 +53,85 @@ Installed BMad modules (see `_bmad/_config/manifest.yaml`):
 - **bmb** — BMad Builder (agents/workflows/modules)
 - **cis** — Creative Intelligence Suite
 
+## Clone, second PC, or after `git pull`
+
+Use this on a **new machine** or whenever you pull changes that touch `package.json` or `pnpm-lock.yaml`.
+
+### Node, pnpm, and dependencies
+
+1. Install **Node.js 24.21.0** (see `package.json` `engines`).
+2. Enable **Corepack** (ships with Node) so this repo uses the pinned package manager:
+   ```powershell
+   corepack enable
+   corepack prepare pnpm@10.12.1 --activate
+   ```
+   Corepack reads `"packageManager": "pnpm@10.12.1"` in `package.json` so both PCs use the same pnpm version. If `corepack enable` fails on Windows, run the terminal as Administrator once, or install `pnpm@10.12.1` globally and still run `pnpm install` from the repo root.
+3. From the **repository root**:
+   ```powershell
+   pnpm install
+   ```
+   Git does not commit `node_modules/` — install recreates tooling (ESLint, Prettier, TypeScript, workspace packages) from the lockfile.
+4. Quick check:
+   ```powershell
+   pnpm format:check
+   pnpm lint
+   pnpm lint:boundaries
+   ```
+
+**Every pull:** `git pull` then `pnpm install` if dependencies changed.
+
+### Git branches (see [`CONTRIBUTING.md`](CONTRIBUTING.md))
+
+| Branch            | Role                                                 |
+| ----------------- | ---------------------------------------------------- |
+| `main`            | Production                                           |
+| `development`     | Integration (cut from `main` once, then long-lived)  |
+| `feat-<story-id>` | Feature work (e.g. `feat-1.1` for story ref **1.1**) |
+
+Work merges: `feat-*` → PR → `development` → PR → `main`.
+
+### Implementation tickets (repo store)
+
+Story queue lives under `_bmad-output/initiative-pc-part-picker-builder/`:
+
+- **Epic order:** `tickets.toml`
+- **Per-epic stories:** `epic-1-application-foundation/tickets.toml`, … `epic-9-…/tickets.toml`
+
+See what is ready to start:
+
+```powershell
+uv run .agents/skills/bmad-ticket/scripts/tickets.py --project-root . next _bmad-output/initiative-pc-part-picker-builder
+```
+
+(Requires BMad skills under `.agents/skills/` or adjust path if you use a global install.)
+
+### GitHub Issues and milestones
+
+[Issues](https://github.com/pncnaveen/pc-part-picker-builder/issues) track implementation; **build order** stays in `tickets.toml` (BMad repo store).
+
+| Layer                | GitHub                                                                                                                                                                            |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Milestone**        | One per epic (filter board by milestone)                                                                                                                                          |
+| **Epic issue**       | Parent issue, label `epic` — e.g. [#47 Epic 1: Application foundation](https://github.com/pncnaveen/pc-part-picker-builder/issues/47)                                             |
+| **Story sub-issues** | Children via `--parent`, label `story`, titles `[1.1]` … `[9.4]` — e.g. [#56 `[1.1] Monorepo scaffold…`](https://github.com/pncnaveen/pc-part-picker-builder/issues/56) under #47 |
+
+**Epic parent issues (current):** #47 Epic 1 · #48 Epic 4 · #49 Epic 2 · #50 Epic 3 · #51 Epic 5 · #52 Epic 6 · #53 Epic 7 · #54 Epic 8 · #55 Epic 9.
+
+**PRs:** branch `feat-1.1` from `development`; close the **story sub-issue** (`Closes #56` for **1.1**, or search `gh issue list --search "[1.1] in:title"`). Full AC: `planning-artifacts/epics.md`.
+
+Recreate from tickets (closes all open issues first):
+
+```powershell
+uv run _bmad/scripts/sync_github_issues.py --reset
+```
+
+Bidirectional BMad ↔ GitHub state: `bmad-ticket` store setup in `_bmad/custom/ticketing-store-config.toml`.
+
+---
+
 ## Setting up BMad on a new machine
 
-Use this when you clone the repo later or move to another PC.
+Same as above for Node/pnpm; additionally:
 
 ### 1. Prerequisites
 
@@ -131,16 +209,19 @@ Never commit `.env`, keys, or credential files (patterns in `.gitignore`).
 
 ## Development
 
-- **Node** 24.21.0, **pnpm** workspace — see `package.json` and [`CONTRIBUTING.md`](CONTRIBUTING.md).
-- Root checks: `pnpm install`, `pnpm format:check`, `pnpm lint`, `pnpm lint:boundaries`.
+See **Clone, second PC, or after `git pull`** for Node, Corepack, and `pnpm install`.
+
+- Toolchain details: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- Agent rules: [`AGENTS.md`](AGENTS.md)
 
 ## Suggested workflow (planning → build)
 
 Planning artifacts above are complete. Implementation:
 
-1. `bmad-sprint-planning` → sprint status (optional)
-2. Epic 1 stories in `epics.md` → `feat-1.x` branches off `development`
-3. `bmad-build` → implementation per story
+1. Create `development` from `main` on the remote if not done yet; branch `feat-1.1` from `development` for the first story.
+2. `bmad-sprint-planning` → sprint status (optional)
+3. Story **1.1** in `epic-1-application-foundation/tickets.toml` — full AC in `epics.md` → `bmad-build` or implement manually
+4. Track work on [GitHub Issues](https://github.com/pncnaveen/pc-part-picker-builder/issues) (milestones per epic)
 
 Use `bmad-correct-course` if scope shifts mid-stream.
 

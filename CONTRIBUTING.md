@@ -12,7 +12,7 @@ Thanks for working on PC Part Picker Builder. This doc covers **git workflow**, 
 
 1. Branch from `development`: `feat-1.1`, `feat-5.4`, etc. (story ref from `tickets.py` / epic `tickets.toml` — e.g. **1.1** = Epic 1 story 1; see [`initiative-pc-part-picker-builder/tickets.toml`](_bmad-output/initiative-pc-part-picker-builder/tickets.toml)).
 2. Implement and test locally.
-3. Open a **PR into `development`**.
+3. Open a **PR into `development`** — close the **story sub-issue** (`Closes #N`; find it with `gh issue list --search "[1.1] in:title"`). Epic trackers are parent issues (label `epic`).
 4. After merge, promote **`development` → `main`** via PR when ready for production.
 
 Do not push feature work directly to `main` or `development` without review unless explicitly agreed for a hotfix.
