@@ -1,0 +1,109 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when its first story starts (via build's sprint sync)
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; the status view surfaces open ones
+generated: 10-12-2026 20:12
+last_updated: 10-12-2026 20:12
+project: pc-part-picker-builder
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+development_status:
+  epic-1: backlog
+  1-1-monorepo-scaffold-and-pinned-toolchain: backlog
+  1-2-local-infrastructure-via-docker-compose: backlog
+  1-3-prisma-baseline-and-api-health-check: backlog
+  1-4-hexagonal-package-boundaries: backlog
+  1-5-react-spa-shell-and-api-cors-baseline: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-register-with-email-and-password: backlog
+  2-2-verify-email-before-save-eligibility: backlog
+  2-3-login-session-and-logout: backlog
+  2-4-password-reset: backlog
+  2-5-start-an-in-session-build: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-browse-parts-by-slot-category: backlog
+  3-2-part-detail-with-compatibility-oriented-specs: backlog
+  3-3-text-search-parts: backlog
+  3-4-staleness-badges-on-part-cards: backlog
+  3-5-build-level-stale-commerce-summary: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-catalog-release-and-buildcores-spec-ingest: backlog
+  4-2-operator-part-asin-csv-import: backlog
+  4-3-commerce-scrape-worker-job: backlog
+  4-4-global-catalog-incident-banner: backlog
+  4-5-activate-compat-rules-for-catalog-release: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-set-budget-and-over-budget-acknowledgment: backlog
+  5-2-declare-use-workloads-and-display: backlog
+  5-3-register-owned-parts-and-slot-locks: backlog
+  5-4-guided-build-recommendations: backlog
+  5-5-manual-slot-selection-with-compat-preview: backlog
+  5-6-live-build-summary: backlog
+  5-7-server-compatibility-on-every-mutation: backlog
+  5-8-substitute-discovery-and-apply: backlog
+  5-9-performance-estimate-tiers: backlog
+  epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-save-build-verified-accounts-only: backlog
+  6-2-list-saved-builds: backlog
+  6-3-open-and-edit-saved-build-with-re-evaluation: backlog
+  6-4-delete-build-and-revoke-share-tokens: backlog
+  6-5-complete-and-finalize-with-required-slots: backlog
+  epic-6-retrospective: optional
+
+  epic-7: backlog
+  7-1-create-share-link: backlog
+  7-2-view-shared-build-read-only: backlog
+  7-3-suggest-compatible-swaps-on-shared-build: backlog
+  7-4-compare-two-builds: backlog
+  epic-7-retrospective: optional
+
+  epic-8: backlog
+  8-1-link-out-for-mapped-parts: backlog
+  8-2-unmapped-part-find-locally-ux: backlog
+  8-3-stale-price-confirmation-on-link-out: backlog
+  8-4-export-build-link-out-list: backlog
+  epic-8-retrospective: optional
+
+  epic-9: backlog
+  9-1-outbox-relay-and-email-worker-plumbing: backlog
+  9-2-build-summary-email-on-finalize: backlog
+  9-3-price-and-availability-alert-emails: backlog
+  9-4-email-notification-settings: backlog
+  epic-9-retrospective: optional
