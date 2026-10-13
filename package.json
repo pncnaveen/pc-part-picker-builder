@@ -5,13 +5,23 @@
   "engines": {
     "node": "24.21.0"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "esbuild",
+      "prisma"
+    ]
+  },
   "scripts": {
+    "build": "pnpm -r --if-present run build",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
     "lint:boundaries": "depcruise --config dependency-cruiser.config.cjs -- packages/domain/src"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "@eslint/js": "^9.28.0",
     "dependency-cruiser": "^16.10.4",
     "eslint": "^9.28.0",

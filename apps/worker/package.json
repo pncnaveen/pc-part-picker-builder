@@ -1,0 +1,16 @@
+{
+  "name": "@pcppb/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "node --watch dist/main.js",
+    "start": "node dist/main.js",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "typescript": "5.9.2"
+  }
+}

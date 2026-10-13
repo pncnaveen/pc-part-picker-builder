@@ -73,6 +73,7 @@ Use this on a **new machine** or whenever you pull changes that touch `package.j
    Git does not commit `node_modules/` — install recreates tooling (ESLint, Prettier, TypeScript, workspace packages) from the lockfile.
 4. Quick check:
    ```powershell
+   pnpm build
    pnpm format:check
    pnpm lint
    pnpm lint:boundaries

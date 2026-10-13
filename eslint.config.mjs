@@ -23,6 +23,12 @@ export default tseslint.config(
     },
   },
   {
+    files: ['apps/frontend/**/*.{ts,tsx}'],
+    languageOptions: {
+      globals: { ...globals.browser },
+    },
+  },
+  {
     files: ['packages/domain/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': [
