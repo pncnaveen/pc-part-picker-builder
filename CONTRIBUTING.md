@@ -46,6 +46,8 @@ On **Windows PowerShell**, chain commands with `;` — `&&` is not reliable on o
 | `pnpm lint:boundaries` | dependency-cruiser (domain layering)        |
 | `pnpm build`           | TypeScript build for all workspace packages |
 
+Local Postgres, RabbitMQ, and Redis: `docker compose -f infra/compose.yaml up -d` (see [README](README.md#local-infrastructure-docker-compose)). Env vars for `api` / `worker`: [`.env.example`](.env.example).
+
 Per-app `dev` and `test` commands live under `apps/*` as later Epic 1 stories land.
 
 ## Coding standards

@@ -38,6 +38,7 @@ pc-part-picker-builder/
 ├── _bmad-output/          # Generated planning & implementation artifacts
 ├── .agents/skills/        # Cursor skill copies (optional in git — see .gitignore)
 ├── docs/                  # Project knowledge (optional; referenced by BMM config)
+├── infra/                 # compose.yaml — local Postgres, RabbitMQ, Redis (Epic 1.2+)
 ├── packages/              # domain, db, shared (Epic 1+)
 ├── apps/                  # frontend, api, worker (Epic 1+)
 ├── CONTRIBUTING.md        # Git workflow and coding standards
@@ -80,6 +81,42 @@ Use this on a **new machine** or whenever you pull changes that touch `package.j
    ```
 
 **Every pull:** `git pull` then `pnpm install` if dependencies changed.
+
+### Local infrastructure (Docker Compose)
+
+Story **1.2** — Postgres **16**, RabbitMQ **4.x** (management UI), Redis **7.4** for `api` and `worker`.
+
+**Prerequisites:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) (or Docker Engine + Compose v2).
+
+From the **repository root**:
+
+```powershell
+docker compose -f infra/compose.yaml up -d
+docker compose -f infra/compose.yaml ps
+```
+
+| Service     | Host port | Purpose                                    |
+| ----------- | --------- | ------------------------------------------ |
+| Postgres    | `5432`    | `DATABASE_URL` / Prisma                    |
+| Redis       | `6379`    | `REDIS_URL`                                |
+| RabbitMQ    | `5672`    | `RABBITMQ_URL` (AMQP)                      |
+| RabbitMQ UI | `15672`   | http://localhost:15672 (`pcppb` / `pcppb`) |
+
+Stop and remove containers (keeps the Postgres volume):
+
+```powershell
+docker compose -f infra/compose.yaml down
+```
+
+**Environment variables** for `apps/api` and `apps/worker` when pointing at this stack (copy [`.env.example`](.env.example) to `.env` at repo root, or set in your shell):
+
+| Variable       | Local value (matches `infra/compose.yaml`)      |
+| -------------- | ----------------------------------------------- |
+| `DATABASE_URL` | `postgresql://pcppb:pcppb@localhost:5432/pcppb` |
+| `REDIS_URL`    | `redis://localhost:6379`                        |
+| `RABBITMQ_URL` | `amqp://pcppb:pcppb@localhost:5672`             |
+
+Prisma CLI also reads `DATABASE_URL` from `packages/db/.env` — use the same URL there for migrations (Story 1.3+).
 
 ### Git branches (see [`CONTRIBUTING.md`](CONTRIBUTING.md))
 
