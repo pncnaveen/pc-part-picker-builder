@@ -1,7 +1,7 @@
 # Agent instructions
 
 <!-- bmad:context -->
-<!-- Verified 2026-10-12 against f5018bf7ef66e98baa657177052f1d24509f186b. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. Human edits: CONTRIBUTING + toolchain (same day). -->
+<!-- Verified 2026-10-13 against a29ece52bad3e8b00e24e4d2cb873d9b868ac640. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. Human edits: CONTRIBUTING + toolchain (same day); story branch checkout (2026-10-13). -->
 
 ## pc-part-picker-builder
 
@@ -13,7 +13,8 @@ Individuals v1 (India): budget, owned hardware, server-owned compatibility, cata
 - Never implement Invalid vs Warning compatibility logic in `apps/frontend`; render server eval only (AD-2, AD-16, `EXPERIENCE.md`).
 - Never write Build state except through `BuildService` / API paths the architecture defines (AD-3).
 - Never hand-edit generated artifacts; use the BMad skill or script that owns that output.
-- **Git branches:** `main` is production; `development` is the integration branch (created from `main` once, then long-lived). For each story, epic slice, or feature, branch from `development` as `feat-<story-id>` (use the ticket/story id from `epics.md` or `tickets.toml`). Complete work locally and test, then open a PR into `development`. After merge to `development`, promote to `main` via PR (do not land feature work directly on `main` or `development` without review unless the user explicitly requests it).
+- **Git branches:** `main` is production; `development` is the integration branch (created from `main` once, then long-lived). Story and feature work uses `feat-<story-id>` (story id from `epics.md` or epic `tickets.toml`, e.g. `feat-1.1`). Complete work locally and test, then open a PR into `development`. After merge to `development`, promote to `main` via PR (do not land feature work directly on `main` or `development` without review unless the user explicitly requests it).
+- **Story implementation branches:** When starting a story (`bmad-build` or manual), use `feat-<story-id>` branched from `development`. If that branch already exists locally or on the remote, check it out and continue — do not create a second branch for the same story. If it does not exist, update `development` (`git fetch` / merge or rebase as the repo already does), then `git checkout -b feat-<story-id> development`. Do not implement story work on `main` or `development` unless the user explicitly requests it.
 
 ## Where things are
 
