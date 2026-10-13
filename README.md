@@ -118,6 +118,30 @@ docker compose -f infra/compose.yaml down
 
 Prisma CLI also reads `DATABASE_URL` from `packages/db/.env` — use the same URL there for migrations (Story 1.3+).
 
+### Prisma baseline and API health (Story 1.3)
+
+With Compose running and `DATABASE_URL` set (root `.env` and `packages/db/.env`):
+
+```powershell
+pnpm install
+pnpm --filter @pcppb/db run migrate:deploy
+pnpm --filter @pcppb/api run dev
+```
+
+Verify database reachability:
+
+```powershell
+curl http://localhost:3000/health
+```
+
+Expect HTTP **200** and JSON like `{"status":"ok","checks":{"database":"ok"}}`. The initial migration creates only Prisma’s `_prisma_migrations` table (no domain models yet).
+
+For a new migration during development:
+
+```powershell
+pnpm --filter @pcppb/db run migrate:dev
+```
+
 ### Git branches (see [`CONTRIBUTING.md`](CONTRIBUTING.md))
 
 | Branch            | Role                                                 |

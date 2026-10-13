@@ -1,0 +1,1 @@
+-- Baseline migration (Story 1.3): establishes migration history only; no domain tables.
