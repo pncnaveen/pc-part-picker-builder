@@ -10,7 +10,7 @@ covers = []
 after = []
 hitl = false
 risk = "medium"
-notes = ["Partial: root toolchain and packages/domain stub exist; apps/* not scaffolded yet."]
+notes = []
 
 [[entry]]
 id = 2

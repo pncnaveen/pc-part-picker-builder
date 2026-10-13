@@ -5,3 +5,5 @@ build
 _bmad
 _bmad-output
 pnpm-lock.yaml
+*.tsbuildinfo
+**/*.prisma

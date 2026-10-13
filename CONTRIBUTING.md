@@ -38,14 +38,15 @@ On **Windows PowerShell**, chain commands with `;` — `&&` is not reliable on o
 
 ### Root scripts (grow with Epic 1)
 
-| Command                | Purpose                              |
-| ---------------------- | ------------------------------------ |
-| `pnpm format`          | Prettier write                       |
-| `pnpm format:check`    | Prettier CI check                    |
-| `pnpm lint`            | ESLint                               |
-| `pnpm lint:boundaries` | dependency-cruiser (domain layering) |
+| Command                | Purpose                                     |
+| ---------------------- | ------------------------------------------- |
+| `pnpm format`          | Prettier write                              |
+| `pnpm format:check`    | Prettier CI check                           |
+| `pnpm lint`            | ESLint                                      |
+| `pnpm lint:boundaries` | dependency-cruiser (domain layering)        |
+| `pnpm build`           | TypeScript build for all workspace packages |
 
-Per-app `dev`, `test`, and `build` commands are added under `apps/*` as Epic 1 stories land.
+Per-app `dev` and `test` commands live under `apps/*` as later Epic 1 stories land.
 
 ## Coding standards
 
