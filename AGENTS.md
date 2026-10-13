@@ -1,7 +1,7 @@
 # Agent instructions
 
 <!-- bmad:context -->
-<!-- Verified 2026-10-13 against a29ece52bad3e8b00e24e4d2cb873d9b868ac640. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. Human edits: CONTRIBUTING + toolchain (same day); story branch checkout (2026-10-13). -->
+<!-- Verified 2026-10-13 against 419e161c4b5f8addc377c373da5b726a19bb5980. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
 
 ## pc-part-picker-builder
 
@@ -24,6 +24,7 @@ Individuals v1 (India): budget, owned hardware, server-owned compatibility, cata
 - UX (visual + behavior): `.../ux-pc-part-picker-builder/DESIGN.md`, `EXPERIENCE.md` — spines win on conflict with mocks
 - Epics and stories: `_bmad-output/planning-artifacts/epics.md`
 - BMad config and scripts: `_bmad/`, `_bmad/scripts/`; team overrides `_bmad/custom/config.toml`
+- Nest API layout: feature modules under `apps/api/src/<feature>/`; shared delivery infra under `apps/api/src/infrastructure/` (e.g. `persistence/` for Prisma Nest wiring) — see `health/` + `infrastructure/persistence/` as the reference shape
 
 ## Running and verifying
 
@@ -35,7 +36,9 @@ Individuals v1 (India): budget, owned hardware, server-owned compatibility, cata
 ## Conventions that differ from defaults
 
 - `packages/domain` must not import Nest, Prisma, RabbitMQ, Redis, or React — enforce with ESLint + `pnpm lint:boundaries` (AD-16).
-- Prisma and repositories live in `packages/db` only; HTTP DTOs stay in `apps/api` (and mappers), not in React.
+- Prisma schema, migrations, and repositories live in `packages/db` only — never in `apps/api`; HTTP response/request shapes stay in `apps/api` (`*.types.ts` or `dto/` beside the controller), not in `packages/domain` or React.
+- In `apps/api`, inject narrow port interfaces (Nest injection tokens) into controllers and application services — not `PrismaService` or `@prisma/client`; implement ports in `infrastructure/` using `@pcppb/db` (adapters own Prisma calls).
+- Keep one shared `PrismaService` (connection lifecycle) in `infrastructure/persistence/`; feature code reaches the database through ports or future repositories, not by extending the client in handlers.
 - Money in API/DB: integer **paise** (INR), not floats.
 - Public ids: **ULID** for Build, Part, Account (AD-15).
 - HTTP JSON `camelCase`; PostgreSQL `snake_case`; domain terms from `spec-pc-part-picker-builder/glossary.md`.

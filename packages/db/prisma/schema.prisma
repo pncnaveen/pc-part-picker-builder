@@ -1,4 +1,4 @@
-// Baseline generator only — models land in Story 1.3.
+// Story 1.3 baseline: datasource + migrations only; domain models land in later epics.
 generator client {
   provider = "prisma-client-js"
 }

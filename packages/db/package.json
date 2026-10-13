@@ -2,12 +2,13 @@
   "name": "@pcppb/db",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "cross-env DATABASE_URL=postgresql://localhost:5432/pcppb prisma generate && tsc -p tsconfig.json",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy"
   },
   "dependencies": {
     "@prisma/client": "^6.16.0"
