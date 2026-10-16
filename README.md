@@ -142,6 +142,24 @@ For a new migration during development:
 pnpm --filter @pcppb/db run migrate:dev
 ```
 
+### Hexagonal boundaries and worker skeleton (Story 1.4)
+
+Enforce AD-16 domain layering:
+
+```powershell
+pnpm lint:boundaries
+```
+
+`packages/domain` must not import Nest, Prisma, RabbitMQ, Redis, React, or `@pcppb/db` (ESLint + dependency-cruiser).
+
+With Compose running and `RABBITMQ_URL` set in root `.env`:
+
+```powershell
+pnpm --filter @pcppb/worker run dev
+```
+
+Expect a log line that the worker connected to RabbitMQ; no message consumers run yet.
+
 ### Git branches (see [`CONTRIBUTING.md`](CONTRIBUTING.md))
 
 | Branch            | Role                                                 |

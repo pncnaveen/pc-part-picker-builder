@@ -37,6 +37,7 @@ export default tseslint.config(
           patterns: [
             {
               group: [
+                '@pcppb/db',
                 '@nestjs/*',
                 '@prisma/*',
                 'prisma',

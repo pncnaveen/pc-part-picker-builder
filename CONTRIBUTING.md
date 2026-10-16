@@ -59,7 +59,7 @@ Per-app `dev` and `test` commands live under `apps/*` as later Epic 1 stories la
 - **`apps/api` / `apps/worker`:** delivery adapters; call application services, not Prisma from controllers/handlers.
 - **`apps/frontend`:** feature folders (`features/build`, `features/catalog`); API client + hooks; thin UI.
 
-Run `pnpm lint:boundaries` after `packages/domain` exists (Story 1.4).
+Run `pnpm lint:boundaries` whenever you change `packages/domain` imports (Story 1.4+).
 
 ### Types and data
 
