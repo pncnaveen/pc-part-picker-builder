@@ -60,7 +60,7 @@ Use this on a **new machine** or whenever you pull changes that touch `package.j
 
 ### Node, pnpm, and dependencies
 
-1. Install **Node.js 24.21.0** (see `package.json` `engines`).
+1. Install **Node.js 24.x LTS** (`>=24.21.0 <25` in `package.json` `engines`; `.nvmrc` is `24` for latest 24.x with fnm/nvm).
 2. Enable **Corepack** (ships with Node) so this repo uses the pinned package manager:
    ```powershell
    corepack enable

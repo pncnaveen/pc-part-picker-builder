@@ -11,7 +11,7 @@ EPICS = {
             (
                 1,
                 "Monorepo scaffold and pinned toolchain",
-                "pnpm workspace apps and packages with pinned Node 24.21.0 / TS 5.9.",
+                "pnpm workspace apps and packages with Node 24.x LTS (>=24.21.0 <25) / TS 5.9.",
                 "Clone, pnpm install, and TypeScript build succeed at root.",
             ),
             (

@@ -29,7 +29,7 @@ Do not push feature work directly to `main` or `development` without review unle
 
 ## Toolchain
 
-- **Node.js** 24.21.0 (see `package.json` `engines`).
+- **Node.js** 24.x LTS, `>=24.21.0 <25` (see `package.json` `engines`; `.nvmrc` selects latest 24.x).
 - **pnpm** via **Corepack** (recommended): `corepack enable` then `corepack prepare pnpm@10.12.1 --activate` (matches `packageManager` in `package.json`).
 - **pnpm** workspace — install from repo root: `pnpm install`.
 - **BMad scripts:** `uv run _bmad/scripts/resolve_config.py --project-root .`

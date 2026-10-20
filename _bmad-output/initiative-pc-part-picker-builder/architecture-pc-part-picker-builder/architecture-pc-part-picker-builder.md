@@ -197,7 +197,7 @@ flowchart LR
 
 | Name | Version |
 | --- | --- |
-| Node.js | 24.21.0 |
+| Node.js | 24.x LTS (`>=24.21.0 <25`) |
 | TypeScript | 5.9 |
 | NestJS | 11.x |
 | React | 19.3 |

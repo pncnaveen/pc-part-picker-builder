@@ -4,7 +4,7 @@
 id = 1
 type = "story"
 title = "Monorepo scaffold and pinned toolchain"
-description = "pnpm workspace apps and packages with pinned Node 24.21.0 / TS 5.9."
+description = "pnpm workspace apps and packages with Node 24.x LTS (>=24.21.0 <25) / TS 5.9."
 verify = "Clone, pnpm install, and TypeScript build succeed at root."
 covers = []
 after = []

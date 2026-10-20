@@ -122,7 +122,7 @@ NFR-10 (Region): India launch — INR, india catalog, amazon.in link-out scope.
 
 ### Additional Requirements
 
-- **Epic 1 / greenfield starter:** pnpm workspace with `apps/frontend` (React 19.3 SPA), `apps/api` (NestJS 11.x), `apps/worker` (RabbitMQ consumers); `packages/domain`, `packages/db` (Prisma 6.x), `packages/shared`; Node 24.21.0; TypeScript 5.9.
+- **Epic 1 / greenfield starter:** pnpm workspace with `apps/frontend` (React 19.3 SPA), `apps/api` (NestJS 11.x), `apps/worker` (RabbitMQ consumers); `packages/domain`, `packages/db` (Prisma 6.x), `packages/shared`; Node 24.x LTS (`>=24.21.0 <25`); TypeScript 5.9.
 
 - **Local infra:** Docker Compose for PostgreSQL 16, RabbitMQ 4.x, Redis 7.4 LTS (`infra/compose.yaml`).
 
@@ -289,7 +289,7 @@ So that **all teams share one repo layout aligned to the architecture spine**.
 **Acceptance Criteria:**
 
 **Given** a clean clone of the repository
-**When** I run the documented install command with Node 24.21.0
+**When** I run the documented install command with a supported Node 24.x LTS (`>=24.21.0 <25`)
 **Then** workspace packages resolve and TypeScript 5.9 builds at the root
 **And** pinned versions match the architecture stack table (Nest 11.x, React 19.3, Prisma 6.x) in lockfile or `.npmrc` policy
 
