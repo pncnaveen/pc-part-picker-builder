@@ -5,9 +5,7 @@ import type { HealthResponse } from './health-response.types';
 
 @Controller()
 export class HealthController {
-  constructor(
-    @Inject(DATABASE_HEALTH_PORT) private readonly databaseHealth: DatabaseHealthPort,
-  ) {}
+  constructor(@Inject(DATABASE_HEALTH_PORT) private readonly databaseHealth: DatabaseHealthPort) {}
 
   @Get('health')
   async getHealth(): Promise<HealthResponse> {
