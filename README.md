@@ -160,6 +160,24 @@ pnpm --filter @pcppb/worker run dev
 
 Expect a log line that the worker connected to RabbitMQ; no message consumers run yet.
 
+### React SPA and API CORS (Story 1.5)
+
+With Compose running, migrations applied, and root `.env` set (see Story 1.3), start the API and frontend in separate terminals:
+
+```powershell
+pnpm --filter @pcppb/api run dev
+pnpm --filter @pcppb/frontend run dev
+```
+
+Open http://localhost:5173 — the SPA fetches `GET http://localhost:3000/health` and shows API status and database check.
+
+| Variable            | Where                                    | Default (local)                                                                      |
+| ------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------ |
+| `FRONTEND_ORIGIN`   | API (root `.env`)                        | `http://localhost:5173` — allowed browser origin when `NODE_ENV` is not `production` |
+| `VITE_API_BASE_URL` | Frontend (`apps/frontend/.env` or shell) | `http://localhost:3000`                                                              |
+
+Non-production CORS is enabled only when `NODE_ENV` is not `production`; production deployments must configure CORS explicitly later.
+
 ### Git branches (see [`CONTRIBUTING.md`](CONTRIBUTING.md))
 
 | Branch            | Role                                                 |

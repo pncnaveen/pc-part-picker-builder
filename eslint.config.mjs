@@ -29,6 +29,23 @@ export default tseslint.config(
     },
   },
   {
+    files: ['apps/frontend/**/*.{ts,tsx}'],
+    ignores: ['apps/frontend/src/infrastructure/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'axios',
+              message: 'Import axios only from apps/frontend/src/infrastructure/.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['packages/domain/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': [
