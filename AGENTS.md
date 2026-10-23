@@ -15,6 +15,11 @@ Individuals v1 (India): budget, owned hardware, server-owned compatibility, cata
 - Never hand-edit generated artifacts; use the BMad skill or script that owns that output.
 - **Git branches:** `main` is production; `development` is the integration branch (created from `main` once, then long-lived). Story and feature work uses `feat-<story-id>` (story id from `epics.md` or epic `tickets.toml`, e.g. `feat-1.1`). Complete work locally and test, then open a PR into `development`. After merge to `development`, promote to `main` via PR (do not land feature work directly on `main` or `development` without review unless the user explicitly requests it).
 - **Story implementation branches:** When starting a story (`bmad-build` or manual), use `feat-<story-id>` branched from `development`. If that branch already exists locally or on the remote, check it out and continue — do not create a second branch for the same story. If it does not exist, update `development` (`git fetch` / merge or rebase as the repo already does), then `git checkout -b feat-<story-id> development`. Do not implement story work on `main` or `development` unless the user explicitly requests it.
+- **Pull request title and summary:** Open PRs into `development`. **Title** — same pattern as the story GitHub issue: `[<epic>.<story>] <short name>` (e.g. `[1.5] React SPA shell and API CORS baseline`). **Description** — use this order (see [PR #103](https://github.com/pncnaveen/pc-part-picker-builder/pull/103) for Story 1.2):
+  1. `## Summary` — bullet list of what changed and why.
+  2. Blank line, then `Closes #<N>` on its own line — `N` is the **story** sub-issue (label `story`), not the epic parent. Resolve `N` with e.g. `gh issue list --search "[1.5] in:title"`.
+  3. `## Test plan` — checkboxes for verification steps.
+  GitHub links the issue and closes it on merge only when `Closes` / `Fixes` / `Resolves` appears in the PR body (a markdown link to the issue is not enough). Optional: comment on the issue with `Implementation PR: #<pr>` for the timeline.
 
 ## Where things are
 
