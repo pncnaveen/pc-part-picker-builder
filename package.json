@@ -1,17 +1,9 @@
 {
   "name": "pc-part-picker-builder",
   "private": true,
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@12.15.0",
   "engines": {
     "node": ">=24.21.0 <25"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@prisma/client",
-      "@prisma/engines",
-      "esbuild",
-      "prisma"
-    ]
   },
   "scripts": {
     "build": "pnpm -r --if-present run build",

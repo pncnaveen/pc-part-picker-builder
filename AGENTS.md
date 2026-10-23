@@ -1,7 +1,7 @@
 # Agent instructions
 
 <!-- bmad:context -->
-<!-- Verified 2026-10-13 against 419e161c4b5f8addc377c373da5b726a19bb5980. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
+<!-- Verified 2026-10-21 against bb23e349cf98747d4d4f4bb29986d07c098e6b80. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
 
 ## pc-part-picker-builder
 
@@ -30,6 +30,7 @@ Individuals v1 (India): budget, owned hardware, server-owned compatibility, cata
 - Epics and stories: `_bmad-output/planning-artifacts/epics.md`
 - BMad config and scripts: `_bmad/`, `_bmad/scripts/`; team overrides `_bmad/custom/config.toml`
 - Nest API layout: feature modules under `apps/api/src/<feature>/`; shared delivery infra under `apps/api/src/infrastructure/` (e.g. `persistence/` for Prisma Nest wiring) — see `health/` + `infrastructure/persistence/` as the reference shape
+- React SPA layout (`apps/frontend/src/`): `app/` (shell); `api/` (backend integration only — `config`, `constants`, `paths`, `types/`, `<resource>/fetch-*.ts`); `ports/` (transport interfaces, e.g. `HttpClient`); `infrastructure/` (adapters — **axios only** under `infrastructure/http/`); `features/<name>/` (`components/`, `hooks/`, `types.ts` for UI/hook state). Reference: `features/health/` + `api/health/fetch-health.ts`
 
 ## Running and verifying
 
@@ -48,6 +49,9 @@ Individuals v1 (India): budget, owned hardware, server-owned compatibility, cata
 - Public ids: **ULID** for Build, Part, Account (AD-15).
 - HTTP JSON `camelCase`; PostgreSQL `snake_case`; domain terms from `spec-pc-part-picker-builder/glossary.md`.
 - Async side effects (scrape, email): worker + outbox — do not block HTTP on SMTP or scrape (AD-6).
+- **`apps/frontend` HTTP:** Feature and UI code call `api/<resource>/fetch-*.ts` via `ports/` + `createHttpClient()` from `infrastructure/http/`. Import `axios` only under `infrastructure/` (ESLint `no-restricted-imports`). Do not use raw `fetch` in `features/` or `app/` — extend helpers under `api/`. Paths in `api/paths.ts`; defaults in `api/constants.ts`.
+- **`apps/frontend` types:** `api/types/*.types.ts` = wire JSON aligned with `apps/api` `*.types.ts` plus client fetch outcomes (e.g. `HealthFetchResult`). `features/<name>/types.ts` = screen/hook/UI state only (e.g. loading vs ready) — not API DTOs.
+- **`apps/frontend` hooks:** Load remote data in `useEffect` with an `async` IIFE (`void (async () => { ... })()`), not an `async` effect callback; use a `cancelled` flag in cleanup to avoid setState after unmount. Prefer optional `HttpClient` injection on fetch helpers for tests.
 
 ## Known pitfalls
 
