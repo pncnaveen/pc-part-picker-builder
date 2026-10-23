@@ -1,7 +1,7 @@
 # Agent instructions
 
 <!-- bmad:context -->
-<!-- Verified 2026-10-21 against bb23e349cf98747d4d4f4bb29986d07c098e6b80. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
+<!-- Verified 2026-10-23 against c934a3ae16b32672a26e54ad02eebb934c46edb2. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
 
 ## pc-part-picker-builder
 
@@ -19,7 +19,8 @@ Individuals v1 (India): budget, owned hardware, server-owned compatibility, cata
   1. `## Summary` — bullet list of what changed and why.
   2. Blank line, then `Closes #<N>` on its own line — `N` is the **story** sub-issue (label `story`), not the epic parent. Resolve `N` with e.g. `gh issue list --search "[1.5] in:title"`.
   3. `## Test plan` — checkboxes for verification steps.
-  GitHub links the issue and closes it on merge only when `Closes` / `Fixes` / `Resolves` appears in the PR body (a markdown link to the issue is not enough). Optional: comment on the issue with `Implementation PR: #<pr>` for the timeline.
+  GitHub links the issue and closes it on merge only when `Closes` / `Fixes` / `Resolves` appears in the PR body (a markdown link to the issue is not enough).
+- **Story issue Development link:** After opening the story PR, confirm the **story** sub-issue shows that PR under **Development** — `Closes #N` in the PR body is required for auto-link and close-on-merge. If **Development** is still empty, use the issue UI (**Development → Link a pull request**) and comment `Implementation PR: #<pr>` on the issue.
 
 ## Where things are
 
