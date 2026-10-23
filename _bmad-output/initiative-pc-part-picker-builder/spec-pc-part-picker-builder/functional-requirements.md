@@ -32,7 +32,7 @@ Stable FR IDs from PRD; testable consequences preserved for implementation and Q
 | FR-26 | Maintain price/availability feeds | Amazon.in scrape per `catalog-sources.md`; cadence per `catalog-freshness.md`; banner if scrape down >24h |
 | FR-27 | Surface staleness to users | Build-level stale counts; link-out warns when stale (FR-31) |
 | FR-29 | Required slots for **Complete** | See `required-slots.md` |
-| FR-30 | Email registration and verification | Verify before first save; password reset; no OAuth v1 |
+| FR-30 | Email registration and verification | Verify before first save; password reset; no OAuth v1; password policy in `auth-password-policy.md` |
 | FR-31 | Retailer link-out per Part | amazon.in URLs for mapped Parts (v1); external disclosure; export lists link-outs; stale price confirmation |
 | FR-32 | Build summary email on finalize | One per finalize event; content rules; skip if Invalid/unverified/opt-out; no retailer URLs |
 | FR-33 | Build alert email on price/availability change | Finalized builds only; changed Parts since last alert; max one per build per 48h; opt-out/unverified skip |

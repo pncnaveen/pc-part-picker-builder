@@ -1,11 +1,11 @@
 # Agent instructions
 
 <!-- bmad:context -->
-<!-- Verified 2026-10-23 against c934a3ae16b32672a26e54ad02eebb934c46edb2. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
+<!-- Verified 2026-10-23 (audit) against 0d69681ae02324f773d15b274cc04c2a4dad1b18; re-verify SHA after the next commit touching this block. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
 
 ## pc-part-picker-builder
 
-Individuals v1 (India): budget, owned hardware, server-owned compatibility, catalog freshness. **Planning repo until Epic 1:** implementation follows `architecture-pc-part-picker-builder.md` (pnpm monorepo: Nest API, React SPA, worker). BMad v7 in Cursor; active initiative `initiative-pc-part-picker-builder`. Product contract lives under `_bmad-output/initiative-pc-part-picker-builder/` and `_bmad-output/planning-artifacts/epics.md`.
+Individuals v1 (India): budget, owned hardware, server-owned compatibility, catalog freshness. pnpm monorepo (Nest API, React SPA, worker); Epic 1 foundation is in-repo — implement per `architecture-pc-part-picker-builder.md` and epics. BMad v7 in Cursor; active initiative `initiative-pc-part-picker-builder`. Product contract lives under `_bmad-output/initiative-pc-part-picker-builder/` and `_bmad-output/planning-artifacts/epics.md`.
 
 ## Policy
 
@@ -35,7 +35,7 @@ Individuals v1 (India): budget, owned hardware, server-owned compatibility, cata
 
 ## Running and verifying
 
-- `pnpm install` then `pnpm format:check`, `pnpm lint`, and `pnpm lint:boundaries` (root toolchain; grows with Epic 1 apps).
+- `pnpm install` then `pnpm format:check`, `pnpm lint`, and `pnpm lint:boundaries` (root toolchain; grows with Epic 1 apps). For story work, also run **`test` in every package you changed** when that script exists (`CONTRIBUTING.md` — Vitest for `packages/domain` and `apps/frontend`, Jest + Nest testing for `apps/api`).
 - Verify BMad: `uv run _bmad/scripts/resolve_config.py --project-root .`
 - After Epic 1.2+: `infra/compose.yaml` for Postgres/RabbitMQ/Redis; per-app `dev` scripts under `apps/*`.
 - On Windows PowerShell, chain commands with `;` or separate invocations — `&&` is not a valid separator in older PowerShell.
@@ -53,10 +53,14 @@ Individuals v1 (India): budget, owned hardware, server-owned compatibility, cata
 - **`apps/frontend` HTTP:** Feature and UI code call `api/<resource>/fetch-*.ts` via `ports/` + `createHttpClient()` from `infrastructure/http/`. Import `axios` only under `infrastructure/` (ESLint `no-restricted-imports`). Do not use raw `fetch` in `features/` or `app/` — extend helpers under `api/`. Paths in `api/paths.ts`; defaults in `api/constants.ts`.
 - **`apps/frontend` types:** `api/types/*.types.ts` = wire JSON aligned with `apps/api` `*.types.ts` plus client fetch outcomes (e.g. `HealthFetchResult`). `features/<name>/types.ts` = screen/hook/UI state only (e.g. loading vs ready) — not API DTOs.
 - **`apps/frontend` hooks:** Load remote data in `useEffect` with an `async` IIFE (`void (async () => { ... })()`), not an `async` effect callback; use a `cancelled` flag in cleanup to avoid setState after unmount. Prefer optional `HttpClient` injection on fetch helpers for tests.
+- **Story tests (all epics):** Add or update unit tests for behavior you change; do not ship untested logic when the package already has a `test` script. Details and priorities: `CONTRIBUTING.md` § Tests.
+- **Auth passwords:** Policy is in `_bmad-output/initiative-pc-part-picker-builder/spec-pc-part-picker-builder/auth-password-policy.md`; implement in `packages/domain` (AD-11).
+- **New HTTP endpoints:** Document in Swagger/OpenAPI when adding or changing `apps/api` routes (`CONTRIBUTING.md` § API documentation).
 
 ## Known pitfalls
 
 - `README.md` planning status can lag artifacts — trust each doc's frontmatter `status` over the README table.
 - `.agents/` is gitignored by default; reinstall BMad into the project if skills are missing after clone.
+- `_bmad/method/scripts/tickets.py` is not installed in this repo — use epic `tickets.toml`, `epics.md`, and GitHub issues for story refs; do not assume `tickets.py find` works.
 
 <!-- /bmad:context -->

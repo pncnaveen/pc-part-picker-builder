@@ -10,6 +10,7 @@ companions:
   - performance-estimates.md
   - success-metrics.md
   - functional-requirements.md
+  - auth-password-policy.md
 sources:
   - ../prd-pc-part-picker-builder/prd-pc-part-picker-builder.md
   - ../prd-pc-part-picker-builder/addendum.md
@@ -83,7 +84,7 @@ sources:
 - **Catalog ingest:** Component specs from BuildCores Open DB; price, availability, and URLs from **scheduled amazon.in scrape** (no marketplace affiliate APIs). See `catalog-sources.md`.
 - **Catalog breadth:** **Top parts only** at launch, limited to **2025–2026** model/release years per `catalog-sources.md`; full BuildCores breadth and additional retailers are later expansion.
 - **Platform:** Responsive web only; no native mobile apps in v1.
-- **Auth:** Email and password with verification before first save; password reset; no OAuth or social sign-in in v1.
+- **Auth:** Email and password with verification before first save; password reset; no OAuth or social sign-in in v1. Password rules: [`auth-password-policy.md`](auth-password-policy.md).
 - **Commerce:** Retailer link-out only; no in-app cart or checkout in v1.
 - **Compatibility gate:** Invalid status blocks **Complete**, save, and share link generation.
 - **Email content:** Transactional build summary and alert emails only—no marketing newsletters; no retailer URLs in email bodies; async send with retry and logging.
