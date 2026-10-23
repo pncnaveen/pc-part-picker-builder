@@ -1,7 +1,7 @@
 # Agent instructions
 
 <!-- bmad:context -->
-<!-- Verified 2026-10-23 (audit) against 0d69681ae02324f773d15b274cc04c2a4dad1b18; re-verify SHA after the next commit touching this block. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
+<!-- Verified 2026-10-23 against ebf57fe2e878f183922e3f776067135936951ca4. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
 
 ## pc-part-picker-builder
 
