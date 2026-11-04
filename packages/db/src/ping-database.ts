@@ -1,4 +1,4 @@
-import type { PrismaClient } from '@prisma/client';
+import type { PrismaClient } from './generated/prisma';
 
 /** Lightweight connectivity check — no domain tables required. */
 export async function pingDatabase(client: PrismaClient): Promise<void> {

@@ -1,0 +1,4 @@
+[
+  { "path": "/", "component": "HomePage" },
+  { "path": "/register", "component": "RegisterPage" }
+]

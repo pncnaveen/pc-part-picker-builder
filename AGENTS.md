@@ -19,7 +19,7 @@ Individuals v1 (India): budget, owned hardware, server-owned compatibility, cata
   1. `## Summary` — bullet list of what changed and why.
   2. Blank line, then `Closes #<N>` on its own line — `N` is the **story** sub-issue (label `story`), not the epic parent. Resolve `N` with e.g. `gh issue list --search "[1.5] in:title"`.
   3. `## Test plan` — checkboxes for verification steps.
-  GitHub links the issue and closes it on merge only when `Closes` / `Fixes` / `Resolves` appears in the PR body (a markdown link to the issue is not enough).
+     GitHub links the issue and closes it on merge only when `Closes` / `Fixes` / `Resolves` appears in the PR body (a markdown link to the issue is not enough).
 - **Story issue Development link:** After opening the story PR, confirm the **story** sub-issue shows that PR under **Development** — `Closes #N` in the PR body is required for auto-link and close-on-merge. If **Development** is still empty, use the issue UI (**Development → Link a pull request**) and comment `Implementation PR: #<pr>` on the issue.
 
 ## Where things are

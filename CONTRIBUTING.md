@@ -39,13 +39,13 @@ On **Windows PowerShell**, chain commands with `;` — `&&` is not reliable on o
 
 ### Root scripts (grow with Epic 1)
 
-| Command                | Purpose                                     |
-| ---------------------- | ------------------------------------------- |
-| `pnpm format`          | Prettier write                              |
-| `pnpm format:check`    | Prettier CI check                           |
-| `pnpm lint`            | ESLint                                      |
-| `pnpm lint:boundaries` | dependency-cruiser (domain layering)        |
-| `pnpm build`           | TypeScript build for all workspace packages |
+| Command                | Purpose                                                                   |
+| ---------------------- | ------------------------------------------------------------------------- |
+| `pnpm format`          | Prettier write                                                            |
+| `pnpm format:check`    | Prettier CI check                                                         |
+| `pnpm lint`            | ESLint                                                                    |
+| `pnpm lint:boundaries` | dependency-cruiser (domain layering)                                      |
+| `pnpm build`           | TypeScript build for all workspace packages                               |
 | `pnpm test`            | Run workspace tests (when defined at root; per-package `test` until then) |
 
 Local Postgres, RabbitMQ, and Redis: `docker compose -f infra/compose.yaml up -d` (see [README](README.md#local-infrastructure-docker-compose)). Env vars for `api` / `worker`: [`.env.example`](.env.example).
@@ -81,12 +81,12 @@ Run `pnpm lint:boundaries` whenever you change `packages/domain` imports (Story 
 
 **Every epic / story:** if you change behavior, add or update automated tests in the packages you touch. Do not merge story work that only manual-tests new logic when a `test` script exists for that package.
 
-| Package / app | Runner | What to cover |
-| ------------- | ------ | ------------- |
-| `packages/domain` | **Vitest** | Pure rules (table-driven unit tests). |
-| `apps/api` | **Jest** + `@nestjs/testing` | Controllers/services with ports mocked; stable error shapes. |
-| `apps/frontend` | **Vitest** + Testing Library | Features/hooks/components affected by the story. |
-| `apps/worker` | **Vitest** or **Jest** (match package once introduced) | Consumers and idempotent handlers. |
+| Package / app     | Runner                                                 | What to cover                                                |
+| ----------------- | ------------------------------------------------------ | ------------------------------------------------------------ |
+| `packages/domain` | **Vitest**                                             | Pure rules (table-driven unit tests).                        |
+| `apps/api`        | **Jest** + `@nestjs/testing`                           | Controllers/services with ports mocked; stable error shapes. |
+| `apps/frontend`   | **Vitest** + Testing Library                           | Features/hooks/components affected by the story.             |
+| `apps/worker`     | **Vitest** or **Jest** (match package once introduced) | Consumers and idempotent handlers.                           |
 
 Run affected packages before opening a PR, e.g. `pnpm --filter @pcppb/domain test`, `@pcppb/api test`, `@pcppb/frontend test`.
 

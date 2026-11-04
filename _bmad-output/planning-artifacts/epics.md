@@ -416,6 +416,20 @@ So that **I can assemble without an account until I choose to save**.
 **Then** the API returns a Build id held client-side / session binding without cross-session persist for anonymous users
 **And** authenticated unverified users can assemble but cannot save (FR-19 partial, AD-11)
 
+### Story 2.6: Centralize public ID generation (ULID) in the API
+
+As a **maintainer of the API**,
+I want **one injected generator for public ULIDs**,
+So that **Account, Build, outbox, and token ids stay consistent and testable (AD-15, NFR-9)**.
+
+**Acceptance Criteria:**
+
+**Given** the Nest API assigns public ids
+**When** a feature needs a new public id
+**Then** it calls an injected port (not `ulid()` directly in controllers or application services)
+**And** the default adapter uses ULID; unit tests can substitute fixed ids via the port
+**And** register (Story 2.1) is refactored to use the port with unchanged HTTP contracts and id format
+
 ---
 
 ## Epic 3: India catalog browse & search

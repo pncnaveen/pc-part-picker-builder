@@ -178,6 +178,33 @@ Open http://localhost:5173 — the SPA fetches `GET http://localhost:3000/health
 
 Non-production CORS is enabled only when `NODE_ENV` is not `production`; production deployments must configure CORS explicitly later.
 
+### Register with email and password (Story 2.1)
+
+Apply auth migrations (adds `accounts`, `email_verification_tokens`, `message_outbox`):
+
+```powershell
+pnpm --filter @pcppb/db run migrate:deploy
+pnpm --filter @pcppb/api run dev
+```
+
+Open Swagger UI at http://localhost:3000/api/docs (non-production only) and try `POST /auth/register`.
+
+```powershell
+curl -X POST http://localhost:3000/auth/register -H "Content-Type: application/json" -d "{\"email\":\"test@example.com\",\"password\":\"Pass!234\"}"
+```
+
+Expect HTTP **201** with `accountId` and a neutral message; no session cookie. Register UI: http://localhost:5173/register
+
+Run story tests:
+
+```powershell
+pnpm --filter @pcppb/domain test
+pnpm --filter @pcppb/api test
+pnpm --filter @pcppb/frontend test
+```
+
+Password hashing uses **bcrypt** (cost 12) in the API layer; verification tokens are stored as SHA-256 hashes only.
+
 ### Git branches (see [`CONTRIBUTING.md`](CONTRIBUTING.md))
 
 | Branch            | Role                                                 |
