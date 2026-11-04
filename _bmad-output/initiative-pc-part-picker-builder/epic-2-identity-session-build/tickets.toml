@@ -18,7 +18,7 @@ title = "Verify email before save eligibility"
 description = "Verification gate for save."
 verify = "Unverified cannot save; verified can."
 covers = ["FR-30", "FR-19"]
-after = [1]
+after = [7]
 hitl = false
 risk = "medium"
 
@@ -63,6 +63,18 @@ title = "Start an in-session Build"
 description = "Anonymous/session build without save."
 verify = "Start build returns build id for session."
 covers = ["FR-30", "FR-19"]
-after = [4, 6]
+after = [4, 6, 7]
 hitl = false
 risk = "medium"
+
+[[entry]]
+id = 7
+type = "story"
+title = "Tailwind and shadcn/ui foundation"
+description = "Tailwind + shadcn/ui in apps/frontend; zinc theme; migrate health and register; convention for all later UI."
+verify = "Dev server shows shadcn-styled health and register; lint and frontend tests pass."
+covers = ["NFR-6"]
+after = [1]
+hitl = false
+risk = "low"
+refine = true
