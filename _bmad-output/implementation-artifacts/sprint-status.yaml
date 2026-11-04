@@ -50,7 +50,7 @@ development_status:
   2-4-password-reset: backlog
   2-5-start-an-in-session-build: backlog
   2-6-centralize-public-id-generation-ulid-in-the-api: backlog
-  2-7-tailwind-and-shadcn-ui-foundation: backlog
+  2-7-tailwind-and-shadcn-ui-foundation: in-progress
   epic-2-retrospective: optional
 
   epic-3: backlog

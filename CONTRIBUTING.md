@@ -60,6 +60,7 @@ Per-app `dev` and `test` commands live under `apps/*` as later Epic 1 stories la
 - **`packages/db`:** Prisma schema, migrations, repositories; map to domain at the edge.
 - **`apps/api` / `apps/worker`:** delivery adapters; call application services, not Prisma from controllers/handlers.
 - **`apps/frontend`:** feature folders (`features/build`, `features/catalog`); API client + hooks; thin UI.
+- **`apps/frontend` UI (Story 2.7+):** Product surfaces use **Tailwind CSS** and **shadcn/ui** primitives under `apps/frontend/src/components/ui/` (add more with `pnpm dlx shadcn@4.22.0 add <component>` from `apps/frontend`). Import shared UI via the `@/` alias (`components.json`). Theme tokens live in `src/index.css` (zinc POC per `DESIGN.md`). Do not add new unstyled semantic-only markup for user-facing screens — compose shadcn components and Tailwind utilities instead.
 
 Run `pnpm lint:boundaries` whenever you change `packages/domain` imports (Story 1.4+).
 
