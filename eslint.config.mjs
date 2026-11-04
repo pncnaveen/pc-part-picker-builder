@@ -4,7 +4,14 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['**/node_modules/**', '**/dist/**', '**/build/**', '**/.next/**', '_bmad/**'],
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/build/**',
+      '**/.next/**',
+      '_bmad/**',
+      'packages/db/src/generated/**',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
