@@ -1,7 +1,7 @@
 # Agent instructions
 
 <!-- bmad:context -->
-<!-- Verified 2026-10-23 against ebf57fe2e878f183922e3f776067135936951ca4. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
+<!-- Verified 2026-11-04 against 7bca1a3cd28d33b95210bfb38971d70174238638. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
 
 ## pc-part-picker-builder
 
@@ -21,6 +21,7 @@ Individuals v1 (India): budget, owned hardware, server-owned compatibility, cata
   3. `## Test plan` — checkboxes for verification steps.
      GitHub links the issue and closes it on merge only when `Closes` / `Fixes` / `Resolves` appears in the PR body (a markdown link to the issue is not enough).
 - **Story issue Development link:** After opening the story PR, confirm the **story** sub-issue shows that PR under **Development** — `Closes #N` in the PR body is required for auto-link and close-on-merge. If **Development** is still empty, use the issue UI (**Development → Link a pull request**) and comment `Implementation PR: #<pr>` on the issue.
+- **Story issue build order (in-epic):** Each story sub-issue body places **`### Previous implementation`** and/or **`### Next implementation`** immediately after **Parent epic** — omit a section when empty. Derive links from that epic's `tickets.toml` only (not initiative epic order): **Previous** — one `→ **Story E.N** — title (#issue)` line per entry id in this story's `after`; **Next** — one such line per same-epic story whose `after` includes this entry id. Do not add epic-wide build-order tables in issues. Examples: [Story 2.1 #66](https://github.com/pncnaveen/pc-part-picker-builder/issues/66), [Story 2.7 #111](https://github.com/pncnaveen/pc-part-picker-builder/issues/111). When `after` changes in `tickets.toml`, update every affected story issue body to match.
 
 ## Where things are
 
@@ -28,7 +29,7 @@ Individuals v1 (India): budget, owned hardware, server-owned compatibility, cata
 - PRD, spec companions, glossary: `_bmad-output/initiative-pc-part-picker-builder/prd-pc-part-picker-builder/`, `.../spec-pc-part-picker-builder/`
 - Architecture spine: `.../architecture-pc-part-picker-builder/architecture-pc-part-picker-builder.md`
 - UX (visual + behavior): `.../ux-pc-part-picker-builder/DESIGN.md`, `EXPERIENCE.md` — spines win on conflict with mocks
-- Epics and stories: `_bmad-output/planning-artifacts/epics.md`
+- Epics and stories: `_bmad-output/planning-artifacts/epics.md`; per-epic build order in `_bmad-output/initiative-pc-part-picker-builder/epic-*/tickets.toml` (`after` gates implementation sequence on GitHub story issues)
 - BMad config and scripts: `_bmad/`, `_bmad/scripts/`; team overrides `_bmad/custom/config.toml`
 - Nest API layout: feature modules under `apps/api/src/<feature>/`; shared delivery infra under `apps/api/src/infrastructure/` (e.g. `persistence/` for Prisma Nest wiring) — see `health/` + `infrastructure/persistence/` as the reference shape
 - React SPA layout (`apps/frontend/src/`): `app/` (shell); `api/` (backend integration only — `config`, `constants`, `paths`, `types/`, `<resource>/fetch-*.ts`); `ports/` (transport interfaces, e.g. `HttpClient`); `infrastructure/` (adapters — **axios only** under `infrastructure/http/`); `features/<name>/` (`components/`, `hooks/`, `types.ts` for UI/hook state). Reference: `features/health/` + `api/health/fetch-health.ts`
