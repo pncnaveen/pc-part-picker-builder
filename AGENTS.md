@@ -32,7 +32,7 @@ Individuals v1 (India): budget, owned hardware, server-owned compatibility, cata
 - Epics and stories: `_bmad-output/planning-artifacts/epics.md`; per-epic build order in `_bmad-output/initiative-pc-part-picker-builder/epic-*/tickets.toml` (`after` gates implementation sequence on GitHub story issues)
 - BMad config and scripts: `_bmad/`, `_bmad/scripts/`; team overrides `_bmad/custom/config.toml`
 - Nest API layout: feature modules under `apps/api/src/<feature>/`; shared delivery infra under `apps/api/src/infrastructure/` (e.g. `persistence/` for Prisma Nest wiring) — see `health/` + `infrastructure/persistence/` as the reference shape
-- React SPA layout (`apps/frontend/src/`): `app/` (shell); `api/` (backend integration only — `config`, `constants`, `paths`, `types/`, `<resource>/fetch-*.ts`); `ports/` (transport interfaces, e.g. `HttpClient`); `infrastructure/` (adapters — **axios only** under `infrastructure/http/`); `features/<name>/` (`components/`, `hooks/`, `types.ts` for UI/hook state). Reference: `features/health/` + `api/health/fetch-health.ts`
+- React SPA layout (`apps/frontend/src/`): `app/` (shell); `api/` (backend integration only — `config`, `constants`, `paths`, `types/`, `<resource>/fetch-*.ts`); `ports/` (transport interfaces, e.g. `HttpClient`); `infrastructure/` (adapters — **axios only** under `infrastructure/http/`); `features/<name>/` (`components/`, `hooks/`, `types.ts` for UI/hook state); **`components/ui/`** (shadcn primitives — Story 2.7+). Reference: `features/health/` + `api/health/fetch-health.ts`; UI stack in `CONTRIBUTING.md`.
 
 ## Running and verifying
 

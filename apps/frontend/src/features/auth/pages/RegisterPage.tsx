@@ -5,7 +5,7 @@ export function RegisterPage() {
   const { phase, submit } = useRegister();
 
   return (
-    <main>
+    <main className="mx-auto w-full max-w-md">
       <RegisterForm
         phase={phase}
         onSubmit={(email, password) => {
