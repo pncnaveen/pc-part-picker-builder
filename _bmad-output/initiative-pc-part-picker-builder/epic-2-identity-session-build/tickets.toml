@@ -45,12 +45,24 @@ hitl = false
 risk = "medium"
 
 [[entry]]
+id = 6
+type = "story"
+title = "Centralize public ID generation (ULID) in the API"
+description = "Inject a single ULID-backed port for all public ids assigned in apps/api (AD-15); refactor register to use it."
+verify = "Register and tests use the port; no direct ulid() in feature services; mock returns fixed ids in unit tests."
+covers = ["NFR-9"]
+after = [1]
+hitl = false
+risk = "low"
+refine = true
+
+[[entry]]
 id = 5
 type = "story"
 title = "Start an in-session Build"
 description = "Anonymous/session build without save."
 verify = "Start build returns build id for session."
 covers = ["FR-30", "FR-19"]
-after = [4]
+after = [4, 6]
 hitl = false
 risk = "medium"

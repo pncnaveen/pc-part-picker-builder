@@ -2,4 +2,5 @@
 
 export const API_PATHS = {
   health: '/health',
+  register: '/auth/register',
 } as const;

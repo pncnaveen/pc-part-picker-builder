@@ -1,9 +1,47 @@
-// Story 1.3 baseline: datasource + migrations only; domain models land in later epics.
+// Story 1.3 baseline + Story 2.1 auth tables.
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Account {
+  id            String   @id @db.Char(26)
+  email         String   @unique
+  password_hash String   @map("password_hash")
+  verified      Boolean  @default(false)
+  created_at    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updated_at    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  email_verification_tokens EmailVerificationToken[]
+
+  @@map("accounts")
+}
+
+model EmailVerificationToken {
+  id         String   @id @db.Char(26)
+  account_id String   @map("account_id") @db.Char(26)
+  token_hash String   @map("token_hash")
+  expires_at DateTime @map("expires_at") @db.Timestamptz(6)
+  created_at DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  account Account @relation(fields: [account_id], references: [id], onDelete: Cascade)
+
+  @@index([account_id])
+  @@map("email_verification_tokens")
+}
+
+model MessageOutbox {
+  id           String    @id @db.Char(26)
+  event_type   String    @map("event_type")
+  payload      Json
+  created_at   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  published_at DateTime? @map("published_at") @db.Timestamptz(6)
+
+  @@index([published_at])
+  @@map("message_outbox")
 }

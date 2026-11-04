@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "cross-env DATABASE_URL=postgresql://localhost:5432/pcppb prisma generate && tsc -p tsconfig.json",
+    "build": "cross-env DATABASE_URL=postgresql://localhost:5432/pcppb prisma generate && tsc -p tsconfig.json && node scripts/copy-generated.mjs",
     "lint": "eslint .",
     "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy"

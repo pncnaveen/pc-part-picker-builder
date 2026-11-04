@@ -14,6 +14,9 @@ _bmad/custom/config.user.toml
 # Uncomment if you do not want your name/locale in git:
 # _bmad/config.user.toml
 
+# Prisma client (generated on `pnpm --filter @pcppb/db run build`)
+packages/db/src/generated/
+
 # OS and editor
 .DS_Store
 Thumbs.db

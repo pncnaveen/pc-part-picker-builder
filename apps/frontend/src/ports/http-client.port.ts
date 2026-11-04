@@ -18,4 +18,5 @@ export class HttpRequestError extends Error {
 /** Transport port — application code depends on this, not on axios. */
 export interface HttpClient {
   get<T>(path: string): Promise<HttpResponse<T>>;
+  post<T>(path: string, body: unknown): Promise<HttpResponse<T>>;
 }

@@ -132,7 +132,7 @@ flowchart TB
 
 - **Binds:** CAP-9, FR-30
 - **Prevents:** Unverified or anonymous cross-session persistence.
-- **Rule:** Email/password auth; **verified email required before first save**. Sessions via **httpOnly** cookies. No OAuth in v1. Unauthenticated users hold Build state **in-session only** (client); server is authoritative after save.
+- **Rule:** Email/password auth; **verified email required before first save**. Sessions via **httpOnly** cookies. No OAuth in v1. Unauthenticated users hold Build state **in-session only** (client); server is authoritative after save. **Password and email format rules** are defined in `spec-pc-part-picker-builder/auth-password-policy.md` and enforced in **`packages/domain`** before hash/persist (API adapters call domain validation; do not duplicate policy only in controllers).
 
 ### AD-12 — Owned inventory locks
 

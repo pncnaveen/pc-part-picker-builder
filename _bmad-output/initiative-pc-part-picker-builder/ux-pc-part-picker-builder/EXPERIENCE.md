@@ -3,12 +3,13 @@ name: PC Part Picker & Builder
 description: Desktop-primary web SPA — guided assembly, server-owned compatibility, operator admin; POC slice defined
 status: final
 created: 2026-10-12
-updated: 2026-10-12T15:00
+updated: 2026-10-23T17:15
 sources:
   - ../architecture-pc-part-picker-builder/architecture-pc-part-picker-builder.md
   - ../../planning-artifacts/epics.md
   - ../prd-pc-part-picker-builder/prd-pc-part-picker-builder.md
   - ../spec-pc-part-picker-builder/spec-pc-part-picker-builder.md
+  - ../spec-pc-part-picker-builder/auth-password-policy.md
 ---
 
 # PC Part Picker & Builder — Experience Spine
@@ -34,7 +35,7 @@ Working references (non-authoritative): `.working/ia-draft-desktop-poc.md`, `.wo
 | Catalog picker | Sheet on guided | Yes | Slot-filtered browse/search (FR-5, FR-6) |
 | Part detail | `/catalog/:partId` | Optional POC | Spec + staleness (FR-7) |
 | Build summary | Docked panel | Yes | FR-10 live summary |
-| Auth | `/login`, `/register`, `/verify` | Thin POC | FR-30 |
+| Auth | `/login`, `/register`, `/verify` | Thin POC | FR-30; register helper: 8–12 characters, no spaces — see `../spec-pc-part-picker-builder/auth-password-policy.md` |
 | My builds | `/builds` | Post-POC | FR-19–21 |
 | Shared build | `/share/:token` | Post-POC | FR-22–23 |
 | Compare | `/compare` | Post-POC | FR-24 |
@@ -72,6 +73,7 @@ Microcopy for **Invalid** states names the conflict class in server `message` �
 | **Owned part row** | Context | Register owned catalog Part; locks Slot until unlock confirm (FR-12, AD-12). |
 | **Admin table** | `/admin/*` | Sortable parts; CSV upload → preview → confirm import; no inline scrape triggers from UI (worker-only). |
 | **Incident banner** | Global | When global incident flag set — `Alert` dismissible per session; links to staleness help copy only. |
+| **Auth form** | `/login`, `/register` | Email + password fields with visible labels; **register** shows persistent helper under password (8–12 characters, no spaces). Submit calls API; **no client-side rules weaker than server** (optional HTML `minLength`/`maxLength` aligned with policy OK). Field-level errors render server `message` for the stable `code`; link to sign in from register and vice versa. Success on register: neutral confirmation to check email — no logged-in chrome (Story 2.1). |
 
 ## State Patterns
 
@@ -84,6 +86,11 @@ Microcopy for **Invalid** states names the conflict class in server `message` �
 | Over budget | Summary | Show amount over; acknowledgment control (FR-1); Complete rules in Epic 6 |
 | Stale price / availability | Part line | Badges per `catalog-freshness.md`; link-out confirms if stale (FR-31) |
 | Unauthenticated save | Any | Modal: register/sign in; in-session build retained |
+| Register submitting | `/register` | Disable submit; show loading on primary button; preserve field values. |
+| Register success | `/register` | Inline success (not toast-only): check email to verify; no session / “signed in” affordances until login (Epic 2.3). |
+| Register password invalid | `/register` | Inline error on password from API validation; helper text remains visible. |
+| Register duplicate email | `/register` | Inline error on email; generic copy (no hint that password was wrong). |
+| Register network / server error | `/register` | Recoverable banner or field-level message; retry submit. |
 | Empty catalog search | Picker | "No parts match. Try a different search." — not an error toast |
 | POC small viewport | Guided | Soft banner to use larger screen `[ASSUMPTION]` |
 
@@ -112,6 +119,18 @@ Microcopy for **Invalid** states names the conflict class in server `message` �
 Supported browsers per NFR-1 (latest two Chrome, Firefox, Safari, Edge).
 
 ## Key Flows
+
+### UJ-0 — Jordan registers before saving (Epic 2)
+
+**Protagonist:** Jordan, same as UJ-1. **Entry:** Save or register prompt from unauthenticated save modal → `/register`.
+
+1. Read password helper (8–12 characters, no spaces); enter email and password.
+2. Submit too-short password → server rejects; inline error; form values kept.
+3. Fix password and submit → success message to check email; still not signed in.
+4. **Climax:** Account exists server-side; Jordan can continue in-session build or open verification when Epic 2.2 ships.
+5. **Failure path:** Duplicate email → inline error on email; link to sign in instead.
+
+Thin POC for Story 2.1; verify link consumption is Epic 2.2.
 
 ### UJ-1 — Jordan finishes a first compatible build under budget
 
