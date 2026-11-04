@@ -364,6 +364,8 @@ So that **I can later verify and save builds**.
 **Then** an Account is created with `verified=false` and a verification flow is triggered
 **And** passwords are stored hashed; no session is treated as verified-for-save (FR-30)
 
+**Implementation sequence:** **Next implementation → Story 2.7** (Tailwind and shadcn/ui foundation). Implement **2.7** after **2.1** is complete on `development`.
+
 ### Story 2.2: Verify email before save eligibility
 
 As a **registered user**,
@@ -429,6 +431,23 @@ So that **Account, Build, outbox, and token ids stay consistent and testable (AD
 **Then** it calls an injected port (not `ulid()` directly in controllers or application services)
 **And** the default adapter uses ULID; unit tests can substitute fixed ids via the port
 **And** register (Story 2.1) is refactored to use the port with unchanged HTTP contracts and id format
+
+### Story 2.7: Tailwind and shadcn/ui foundation
+
+As a **developer**,
+I want **Tailwind CSS and shadcn/ui wired in the React SPA** with POC theme defaults,
+So that **all product UI matches DESIGN.md and new screens use one component system**.
+
+**Implementation sequence:** **Previous implementation → Story 2.1** (Register with email and password). Complete **2.1** before implementing **2.7**.
+
+**Acceptance Criteria:**
+
+**Given** the frontend dev server runs
+**When** I inspect the app shell and migrated routes
+**Then** Tailwind and shadcn are configured (Vite, path aliases, zinc theme per DESIGN.md)
+**And** existing Epic 1–2.1 surfaces (home/health, register) use shadcn primitives with unchanged API behavior and EXPERIENCE auth rules
+**And** project agent docs state that **new frontend UI after this story uses shadcn/Tailwind**, not ad-hoc unstyled markup
+**And** frontend unit tests and lint pass
 
 ---
 

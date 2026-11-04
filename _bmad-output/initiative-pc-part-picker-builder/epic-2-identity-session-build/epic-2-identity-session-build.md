@@ -31,3 +31,4 @@ Deliver capabilities cited in `covers` for individuals v1 India launch.
 ## Notes
 
 - Decision: tickets generated from epics.md (2026-10-12).
+- Decision: Story 2.7 (Tailwind + shadcn foundation) gates frontend-heavy stories 2.2–2.5; see `change-tailwind-shadcn-foundation/` (2026-11-04).
